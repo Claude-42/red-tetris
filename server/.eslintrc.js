@@ -1,9 +1,15 @@
 module.exports = {
   env: {
-    node: true,
+    commonjs: true,
+    es2021: true,
+    node: true
   },
-
-  extends: "airbnb",
-
-  parser: "babel-eslint",
-};
+  extends: [
+    'standard'
+  ],
+  parserOptions: {
+    ecmaVersion: 12
+  },
+  rules: {
+  }
+}
