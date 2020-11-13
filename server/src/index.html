@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+
+<title>
+  Page title
+</title>
+
+<button id="send">
+  Send
+</button>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io('http://localhost:3030');
+
+  const button = document.getElementById('send')
+
+  button.addEventListener('click', function sendHandler() {
+    // TODO: to code
+  })
+</script>

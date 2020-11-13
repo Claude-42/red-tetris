@@ -7,8 +7,10 @@
     "test": "jest"
   },
   "dependencies": {
+    "socket.io-client": "^3.0.1",
     "tailwindcss": "^1.9.6",
-    "vue": "^3.0.2"
+    "vue": "^3.0.2",
+    "vue-socket.io": "^3.0.10"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
