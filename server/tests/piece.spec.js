@@ -10,7 +10,7 @@ describe('The Piece class', () => {
       { x: 0, y: 0 },
       { x: 1, y: 0 },
       { x: 1, y: 1 },
-      { x: 2, y: 1 },
+      { x: 2, y: 1 }
     ])
   })
 
@@ -23,7 +23,7 @@ describe('The Piece class', () => {
       { x: 1, y: 0 },
       { x: 0, y: 1 },
       { x: 1, y: 1 },
-      { x: 2, y: 1 },
+      { x: 2, y: 1 }
     ])
   })
 })
