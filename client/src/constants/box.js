@@ -1,0 +1,5 @@
+export const BOX_TYPES = {
+  BACKGROUND: "BACKGROUND",
+  BLOCKED: "BLOCKED",
+  PIECE: "PIECE"
+};
