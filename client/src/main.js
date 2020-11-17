@@ -4,6 +4,8 @@ import router from "./router";
 import store from "./store";
 import { VueSocketPlugin } from "./plugins/socket";
 
+import "./assets/index.css";
+
 createApp(App)
   .use(store)
   .use(router)
