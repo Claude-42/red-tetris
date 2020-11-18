@@ -1,5 +1,3 @@
-// const PIECE_ID = 0
-
 const PIECE_TYPE = {
   RED: 'RED',
   BLUE: 'BLUE',
@@ -11,101 +9,103 @@ const PIECE_TYPE = {
 }
 
 const PIECES = {
-  [PIECE_TYPE.RED]: {
-    internalCoordinates: [
-      [1, 1, 0, 0],
-      [0, 1, 1, 0],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0]
-    ]
-  },
-  [PIECE_TYPE.BLUE]: {
-    internalCoordinates: [
-      [1, 0, 0, 0],
-      [1, 1, 1, 0],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0]
-    ]
-  },
-  [PIECE_TYPE.TURQUOISE]: {
-    internalCoordinates: [
-      [1, 1, 1, 1],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0]
-    ]
-  },
-  [PIECE_TYPE.ORANGE]: {
-    internalCoordinates: [
-      [0, 0, 1, 0],
-      [1, 1, 1, 0],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0]
-    ]
-  },
-  [PIECE_TYPE.GREEN]: {
-    internalCoordinates: [
-      [0, 1, 1, 0],
-      [1, 1, 0, 0],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0]
-    ]
-  },
-  [PIECE_TYPE.PURPLE]: {
-    internalCoordinates: [
-      [0, 1, 0, 0],
-      [1, 1, 1, 0],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0]
-    ]
-  },
-  [PIECE_TYPE.YELLOW]: {
-    internalCoordinates: [
-      [1, 1, 0, 0],
-      [1, 1, 0, 0],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0]
-    ]
-  }
+  [PIECE_TYPE.RED]: [
+    [1, 1, 0],
+    [0, 1, 1],
+    [0, 0, 0]
+  ],
+  [PIECE_TYPE.BLUE]: [
+    [1, 0, 0],
+    [1, 1, 1],
+    [0, 0, 0]
+  ],
+  [PIECE_TYPE.TURQUOISE]: [
+    [0, 0, 0, 0],
+    [1, 1, 1, 1],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0]
+  ],
+  [PIECE_TYPE.ORANGE]: [
+    [0, 0, 1],
+    [1, 1, 1],
+    [0, 0, 0]
+  ],
+  [PIECE_TYPE.GREEN]: [
+    [0, 1, 1],
+    [1, 1, 0],
+    [0, 0, 0]
+  ],
+  [PIECE_TYPE.PURPLE]: [
+    [0, 1, 0],
+    [1, 1, 1],
+    [0, 0, 0]
+  ],
+  [PIECE_TYPE.YELLOW]: [
+    [1, 1],
+    [1, 1]
+  ]
 }
 
 class Piece {
-  constructor (type) {
-    this.type = type
-    
-    this.normalize()
+  constructor (color) {
+    this.color = color
+
+    this.innerCoordinates = PIECES[color]
 
     this.coordinateList = null
+
+    this.globalCoordinates = { x: 0, y: 3 }
+
+    this.normalize()
   }
 
   normalize () {
     const coordinateList = []
 
-    for (let i = 0; i < this.type.internalCoordinates.length; i++) {
-      for (let j = 0; j < this.type.internalCoordinates[i].length; j++) {
-        if (this.type.internalCoordinates[i][j] !== 0) {
+    for (let i = 0; i < this.innerCoordinates.length; i++) {
+      for (let j = 0; j < this.innerCoordinates[i].length; j++) {
+        if (this.innerCoordinates[i][j] !== 0) {
           coordinateList.push({ x: j, y: i })
         }
       }
     }
 
     this.coordinateList = coordinateList
+
+    this.size = this.innerCoordinates[0].length
   }
 
-  //   new(nb) {
-  //     if list[nb] == null
-  //         generatePiece()
-  //     return list[nb]
+  rightRotation () {
+    this.coordinateList = this.coordinateList.map(({ x, y }) => {
+      const xNew = 1 - (y - (this.size - 2))
 
-  //   }
+      return {
+        y: x,
+        x: xNew
+      }
+    })
+  }
 
-  //   static generateRandomPiece () {
-  //     const type = ''
+  toArrayNotation () {
+    const BASE_ARRAY = Array(this.size).fill().map(() => Array(this.size).fill())
 
-//     return new Piece(type)
-//   }
+    return BASE_ARRAY.map((row, rowIndex) => row.map((_, colIndex) => {
+      const foundPiecePart = this.coordinateList.some(({ x, y }) => x === colIndex && y === rowIndex)
+
+      return foundPiecePart ? 1 : 0
+    }))
+  }
+
+  toString () {
+    return this.toArrayNotation().join('\n')
+  }
+
+  // x_new = 1 - (y_old - (size - 2))
+  // y_new = x_old
 }
 
-// Piece.generateRandomPiece()
+const piece = new Piece(PIECE_TYPE.ORANGE)
 
-module.exports = { Piece, PIECE_TYPE, PIECES }
+console.log(piece.toArrayNotation(), PIECES[PIECE_TYPE.ORANGE])
+
+module.exports = { Piece, PIECE_TYPE }
