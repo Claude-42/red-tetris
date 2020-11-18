@@ -11,8 +11,6 @@ const VueSocketPlugin = {
     app.config.globalProperties.$socket = SocketIO.io;
     app.config.globalProperties.$vueSocketIo = SocketIO;
 
-    console.log(SocketIO);
-
     app.mixin({
       /**
        *  Assign runtime callbacks

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
@@ -14,7 +14,8 @@
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vue-socket.io": "^3.0.10",
-    "vuex": "^4.0.0-0"
+    "vuex": "^4.0.0-0",
+    "xstate": "^4.14.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
