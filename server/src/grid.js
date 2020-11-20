@@ -43,6 +43,24 @@ class Grid {
     })
   }
 
+  simulatePieceInGrid () {
+    const pieceCoordinate = this.piece.toGlobalCoordinates()
+    const tmpGrid = Array(20)
+      .fill()
+      .map(() =>
+        Array(10)
+          .fill()
+          .map(() => 0)
+      )
+    this.lockGrid.forEach((x, y) => {
+      tmpGrid[y][x] = this.lockGrid[y][x]
+    })
+    pieceCoordinate.forEach((x, y) => {
+      tmpGrid[y][x] = CASE_COLOR[this.piece.color]
+    })
+    return (tmpGrid)
+  }
+
   handleMove (move) {
     const canApplyMove = this.canApplyMove(move)
     if (canApplyMove) {
