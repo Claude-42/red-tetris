@@ -54,7 +54,7 @@ class Piece {
 
     this.coordinateList = null
 
-    this.globalCoordinates = { x: 0, y: 3 }
+    this.globalCoordinates = { x: 3, y: 0 }
 
     this.normalize()
   }
@@ -86,6 +86,65 @@ class Piece {
     })
   }
 
+  applyRotationAndRecalibrate () {
+    const diff = this.calculateDiffToPlacePieceCorrectlyInGrid()
+    const iterationsToPerform = Math.abs(diff)
+    const functionToCall = diff >= 0 ? () => this.goLeft() : () => this.goRight()
+
+    for (let count = 0; count < iterationsToPerform; count++) {
+      functionToCall()
+    }
+    this.rightRotation()
+  }
+
+  goDown () {
+    this.globalCoordinates.y++
+  }
+
+  goLeft () {
+    this.globalCoordinates.x--
+  }
+
+  goRight () {
+    this.globalCoordinates.x++
+  }
+
+  isIntersecting (grid) {
+    const pieceGlobalCoordinates = this.toGlobalCoordinates()
+
+    return pieceGlobalCoordinates.some(({ x, y }) => grid[y][x] !== 0)
+  }
+
+  isOutsideBoundingBox () {
+    const pieceGlobalCoordinates = this.toGlobalCoordinates()
+
+    return pieceGlobalCoordinates.some(({ x, y }) => x > 9 || x < 0 || y > 19 || y < 0)
+  }
+
+  calculateDiffToPlacePieceCorrectlyInGrid () {
+    if (this.globalCoordinates.x === 8 && this.size > 2) {
+      return (this.size - 2)
+    }
+
+    if (this.globalCoordinates.x === 7 && this.size === 4) {
+      return 1
+    }
+
+    if (this.globalCoordinates.x === -1 && this.size > 2) {
+      return -1
+    }
+
+    if (this.globalCoordinates.x === -2 && this.size === 4) {
+      return -2
+    }
+
+    return 0
+  }
+
+  toString () {
+    return this.toArrayNotation().join('\n')
+  }
+
   toArrayNotation () {
     const BASE_ARRAY = Array(this.size).fill().map(() => Array(this.size).fill())
 
@@ -96,16 +155,24 @@ class Piece {
     }))
   }
 
-  toString () {
-    return this.toArrayNotation().join('\n')
+  toGlobalCoordinates () {
+    return this.coordinateList.map(({ x, y }) => {
+      return {
+        x: x + this.globalCoordinates.x,
+        y: y + this.globalCoordinates.y
+      }
+    })
   }
 
-  // x_new = 1 - (y_old - (size - 2))
-  // y_new = x_old
+  clone () {
+    const clonedPiece = new Piece(this.color)
+
+    clonedPiece.innerCoordinates = this.toArrayNotation()
+    clonedPiece.normalize()
+    clonedPiece.globalCoordinates = { ...this.globalCoordinates }
+
+    return clonedPiece
+  }
 }
-
-const piece = new Piece(PIECE_TYPE.ORANGE)
-
-console.log(piece.toArrayNotation(), PIECES[PIECE_TYPE.ORANGE])
 
 module.exports = { Piece, PIECE_TYPE }
