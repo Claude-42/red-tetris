@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="border border-gray-300">
     <div
       v-for="(columns, rowIndex) in grid"
       :key="`row:${rowIndex}`"
@@ -15,6 +15,11 @@
 </template>
 
 <script>
+import { useEvent } from "vue-composable";
+
+import { useGrid } from "../composables/grid.js";
+import { PIECE_MOVEMENTS } from "../constants/piece.js";
+
 import GridBox from "./GridBox.vue";
 
 export default {
@@ -23,6 +28,27 @@ export default {
       type: Array,
       required: true
     }
+  },
+
+  setup() {
+    const { move } = useGrid();
+
+    useEvent(window, "keyup", event => {
+      const keyToMoveMap = new Map([
+        ["ArrowDown", PIECE_MOVEMENTS.DOWN],
+        [" ", PIECE_MOVEMENTS.FALL],
+        ["ArrowLeft", PIECE_MOVEMENTS.LEFT],
+        ["ArrowRight", PIECE_MOVEMENTS.RIGHT],
+        ["ArrowUp", PIECE_MOVEMENTS.ROTATE]
+      ]);
+
+      const movement = keyToMoveMap.get(event.key);
+      if (movement === undefined) {
+        return;
+      }
+
+      move(movement);
+    });
   },
 
   components: {
