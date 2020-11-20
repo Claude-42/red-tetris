@@ -27,8 +27,7 @@ class Grid {
       .fill()
       .map(() =>
         Array(10)
-          .fill()
-          .map(() => 0)
+          .fill(0)
       )
     this.currentPiece = 0
     const nextPiece = masterPiece.nextPiece(this.currentPiece)
@@ -36,29 +35,24 @@ class Grid {
   }
 
   putPieceInGrid () {
-    const pieceCoordinate = this.piece.toGlobalCoordinates()
+    const pieceCoordinates = this.piece.toGlobalCoordinates()
 
-    pieceCoordinate.forEach((x, y) => {
+    pieceCoordinates.forEach((x, y) => {
       this.lockGrid[y][x] = CASE_COLOR[this.piece.color]
     })
   }
 
   simulatePieceInGrid () {
-    const pieceCoordinate = this.piece.toGlobalCoordinates()
-    const tmpGrid = Array(20)
-      .fill()
-      .map(() =>
-        Array(10)
-          .fill()
-          .map(() => 0)
-      )
-    this.lockGrid.forEach((x, y) => {
-      tmpGrid[y][x] = this.lockGrid[y][x]
-    })
-    pieceCoordinate.forEach((x, y) => {
-      tmpGrid[y][x] = CASE_COLOR[this.piece.color]
-    })
-    return (tmpGrid)
+    const pieceCoordinates = this.piece.toGlobalCoordinates()
+
+    return this.lockGrid.map((row, rowIndex) => row.map((color, columnIndex) => {
+      const pieceOverlapsGridCase = pieceCoordinates.some(({ x, y }) => x === columnIndex && y === rowIndex)
+      if (pieceOverlapsGridCase) {
+        return CASE_COLOR[this.piece.color]
+      }
+
+      return color
+    }))
   }
 
   handleMove (move) {
