@@ -1,19 +1,17 @@
 <template>
-  <div @click="send('MOVE.DOWN')">
+  <div>
     <TheBoardGameGrid :grid="grid" />
 
-    <pre>
-      {{ state }}
-    </pre>
+    <button @click="startGame">
+      Start game
+    </button>
   </div>
 </template>
 
 <script>
 import TheBoardGameGrid from "./TheBoardGameGrid.vue";
 
-import { useMachine } from "../composables/machine";
 import { useGrid } from "../composables/grid.js";
-import { gameMachine } from "../machines/gameMachine.js";
 
 export default {
   components: {
@@ -21,14 +19,11 @@ export default {
   },
 
   setup() {
-    const { grid } = useGrid();
-
-    const { state, send } = useMachine(gameMachine);
+    const { grid, startGame } = useGrid();
 
     return {
       grid,
-      state,
-      send
+      startGame
     };
   }
 };
