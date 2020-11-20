@@ -2,9 +2,8 @@ const express = require('express')
 const app = express()
 const SocketIO = require('socket.io')
 const cors = require('cors')
-const { Masterpiece } = require('../masterpiece')
-const { Grid } = require('../grid')
-const { Piece } = require('../piece')
+const { MasterPiece } = require('./masterpiece')
+const { Grid } = require('./grid')
 
 const PORT = 3030
 
@@ -22,7 +21,7 @@ const server = app.listen(PORT, () => {
 
 const io = SocketIO(server)
 
-const masterpiece = new Masterpiece()
+const masterpiece = new MasterPiece()
 const grid = new Grid(masterpiece)
 
 function sendData (socket) {
@@ -38,8 +37,8 @@ io.on('connection', (socket) => {
     sendData(socket)
   })
 
-  socket.on('move', ({ moveType }) => {
-    grid.handleMove(moveType)
+  socket.on('move', ({ type }) => {
+    grid.handleMove(type)
     sendData(socket)
   })
 })
