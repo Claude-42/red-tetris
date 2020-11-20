@@ -1,33 +1,41 @@
 <template>
-  <div :class="[classes, 'w-6 h-6 border']">
-    <slot />
-  </div>
+  <div :class="[classes, 'w-6 h-6 border border-gray-300']" />
 </template>
 
 <script>
 import { computed } from "vue";
 
-import { BOX_TYPES } from "../constants/box.js";
+import { CASE_COLOR_MAP, CASE_COLOR } from "../constants/piece.js";
 
 export default {
   props: {
     type: {
-      type: String,
+      type: Number,
       required: true,
       validator(value) {
-        return Reflect.has(BOX_TYPES, value);
+        return CASE_COLOR_MAP.has(value);
       }
     }
   },
 
   setup(props) {
-    const classes = computed(() => {
-      const CLASSES = {
-        [BOX_TYPES.BACKGROUND]: "bg-gray-200",
-        [BOX_TYPES.BLOCKED]: "bg-gray-600"
-      };
+    const color = computed(() => CASE_COLOR_MAP.get(props.type));
 
-      return CLASSES[props.type];
+    const classes = computed(() => {
+      const CLASSES = new Map([
+        [CASE_COLOR.RED, "bg-red-400"],
+        [CASE_COLOR.BLUE, "bg-blue-700"],
+        [CASE_COLOR.TURQUOISE, "bg-blue-300"],
+        [CASE_COLOR.ORANGE, "bg-yellow-500"],
+        [CASE_COLOR.GREEN, "bg-green-500"],
+        [CASE_COLOR.PURPLE, "bg-purple-600"],
+        [CASE_COLOR.YELLOW, "bg-yellow-300"],
+
+        [CASE_COLOR.BACKGROUND, "bg-gray-100"],
+        [CASE_COLOR.BLOCKED, "bg-gray-600"]
+      ]);
+
+      return CLASSES.get(color.value);
     });
 
     return {
@@ -35,6 +43,4 @@ export default {
     };
   }
 };
-
-export { BOX_TYPES };
 </script>
