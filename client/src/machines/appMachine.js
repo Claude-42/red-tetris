@@ -3,7 +3,7 @@ import io from "socket.io-client";
 
 const WEBSOCKET_URL = "http://localhost:3030";
 const GO_DOWN_TIME = 1000;
-const DEBOUNCE_TIME = 200;
+const DEBOUNCE_TIME = 100;
 
 export const appMachine = Machine(
   {
