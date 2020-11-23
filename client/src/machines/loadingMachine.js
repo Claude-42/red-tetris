@@ -6,21 +6,21 @@ export const loadingMachine = Machine({
   states: {
     one: {
       after: {
-        1000: "two"
-      }
+        1000: "two",
+      },
     },
     two: {
       after: {
-        1000: "three"
-      }
+        1000: "three",
+      },
     },
     three: {
       after: {
-        1000: "go"
-      }
+        1000: "go",
+      },
     },
     go: {
-      type: "final"
-    }
-  }
+      type: "final",
+    },
+  },
 });

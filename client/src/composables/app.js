@@ -17,6 +17,6 @@ export function useAppMachine() {
   return {
     appMachineState: state,
     appMachineSend: send,
-    appMachineService: service
+    appMachineService: service,
   };
 }

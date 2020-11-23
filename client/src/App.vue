@@ -11,11 +11,11 @@ import { useProvideAppMachine } from "./composables/app.js";
 
 export default {
   components: {
-    TheHeader
+    TheHeader,
   },
 
   setup() {
     useProvideAppMachine();
-  }
+  },
 };
 </script>

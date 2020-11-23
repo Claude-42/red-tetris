@@ -14,8 +14,8 @@ export default {
       required: true,
       validator(value) {
         return CASE_COLOR_MAP.has(value);
-      }
-    }
+      },
+    },
   },
 
   setup(props) {
@@ -32,15 +32,15 @@ export default {
         [CASE_COLOR.YELLOW, "bg-yellow-300"],
 
         [CASE_COLOR.BACKGROUND, "bg-gray-100"],
-        [CASE_COLOR.BLOCKED, "bg-gray-600"]
+        [CASE_COLOR.BLOCKED, "bg-gray-600"],
       ]);
 
       return CLASSES.get(color.value);
     });
 
     return {
-      classes
+      classes,
     };
-  }
+  },
 };
 </script>

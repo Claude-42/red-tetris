@@ -22,7 +22,7 @@ const VueSocketPlugin = {
           this.$vueSocketIo.emitter.addListener(event, callback, this);
         };
 
-        this.sockets.unsubscribe = event => {
+        this.sockets.unsubscribe = (event) => {
           this.$vueSocketIo.emitter.removeListener(event, this);
         };
       },
@@ -32,7 +32,7 @@ const VueSocketPlugin = {
        */
       mounted() {
         if (this.$options.sockets) {
-          Object.keys(this.$options.sockets).forEach(event => {
+          Object.keys(this.$options.sockets).forEach((event) => {
             if (event !== "subscribe" && event !== "unsubscribe") {
               this.$vueSocketIo.emitter.addListener(
                 event,
@@ -49,13 +49,13 @@ const VueSocketPlugin = {
        */
       beforeUnmount() {
         if (this.$options.sockets) {
-          Object.keys(this.$options.sockets).forEach(event => {
+          Object.keys(this.$options.sockets).forEach((event) => {
             this.$vueSocketIo.emitter.removeListener(event, this);
           });
         }
-      }
+      },
     });
-  }
+  },
 };
 
 export { VueSocketPlugin };

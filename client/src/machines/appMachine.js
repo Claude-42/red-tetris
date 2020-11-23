@@ -10,26 +10,26 @@ export const appMachine = Machine(
     id: "app",
     context: {
       grid: undefined,
-      nextPiece: undefined
+      nextPiece: undefined,
     },
     invoke: {
       id: "websocket",
-      src: "setupWebsocket"
+      src: "setupWebsocket",
     },
     initial: "initializing",
     states: {
       initializing: {
         on: {
-          SOCKET_CONNECTED: "waiting"
-        }
+          SOCKET_CONNECTED: "waiting",
+        },
       },
       waiting: {
         on: {
           START_GAME: {
             target: "playing",
-            actions: "sendStartGameToWebsocket"
-          }
-        }
+            actions: "sendStartGameToWebsocket",
+          },
+        },
       },
       playing: {
         type: "parallel",
@@ -41,64 +41,64 @@ export const appMachine = Machine(
                 on: {
                   "MOVE.ROTATE": {
                     target: "debounce",
-                    actions: "forwardToWebsocket"
+                    actions: "forwardToWebsocket",
                   },
                   "MOVE.LEFT": {
                     target: "debounce",
-                    actions: "forwardToWebsocket"
+                    actions: "forwardToWebsocket",
                   },
                   "MOVE.RIGHT": {
                     target: "debounce",
-                    actions: "forwardToWebsocket"
+                    actions: "forwardToWebsocket",
                   },
                   "MOVE.DOWN": {
                     target: "debounce",
-                    actions: "forwardToWebsocket"
+                    actions: "forwardToWebsocket",
                   },
                   "MOVE.DOWN_AUTOMATIC": {
                     target: "debounce",
-                    actions: "forwardToWebsocket"
+                    actions: "forwardToWebsocket",
                   },
                   "MOVE.FALL": {
                     target: "debounce",
-                    actions: "forwardToWebsocket"
-                  }
-                }
+                    actions: "forwardToWebsocket",
+                  },
+                },
               },
               debounce: {
                 after: {
-                  [DEBOUNCE_TIME]: "idle"
-                }
-              }
-            }
+                  [DEBOUNCE_TIME]: "idle",
+                },
+              },
+            },
           },
           moveDownTimer: {
             initial: "idle",
             states: {
               idle: {
                 after: {
-                  [GO_DOWN_TIME]: "inc"
-                }
+                  [GO_DOWN_TIME]: "inc",
+                },
               },
               inc: {
                 entry: "sendAutomaticDownToWebsocket",
                 on: {
-                  "": "idle"
-                }
-              }
-            }
-          }
+                  "": "idle",
+                },
+              },
+            },
+          },
         },
         on: {
           UPDATE_GRID_DATA: {
             actions: assign({
               grid: (_context, { payload: { PAINT_GRID } }) => PAINT_GRID,
-              nextPiece: ({ NEXT_PIECE }) => NEXT_PIECE
-            })
-          }
-        }
-      }
-    }
+              nextPiece: ({ NEXT_PIECE }) => NEXT_PIECE,
+            }),
+          },
+        },
+      },
+    },
   },
   {
     services: {
@@ -109,14 +109,14 @@ export const appMachine = Machine(
           callback("SOCKET_CONNECTED");
         });
 
-        socket.on("ownGrid", payload => {
+        socket.on("ownGrid", (payload) => {
           callback({
             type: "UPDATE_GRID_DATA",
-            payload
+            payload,
           });
         });
 
-        onReceive(event => {
+        onReceive((event) => {
           switch (event.type) {
             case "START_GAME":
               socket.emit("start");
@@ -145,14 +145,14 @@ export const appMachine = Machine(
         return () => {
           socket.disconnect();
         };
-      }
+      },
     },
     actions: {
       sendStartGameToWebsocket: send("START_GAME", { to: "websocket" }),
       forwardToWebsocket: forwardTo("websocket"),
       sendAutomaticDownToWebsocket: send("MOVE.DOWN_AUTOMATIC", {
-        to: "websocket"
-      })
-    }
+        to: "websocket",
+      }),
+    },
   }
 );

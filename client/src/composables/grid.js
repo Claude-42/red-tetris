@@ -24,6 +24,6 @@ export function useGrid() {
     grid,
 
     move,
-    startGame
+    startGame,
   };
 }

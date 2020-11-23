@@ -1,8 +1,6 @@
 <template>
   <div class="home">
-    <router-link to="/board-game">
-      > board game
-    </router-link>
+    <router-link to="/board-game"> > board game </router-link>
   </div>
 </template>
 
@@ -10,6 +8,6 @@
 // @ is an alias to /src
 
 export default {
-  name: "Home"
+  name: "Home",
 };
 </script>

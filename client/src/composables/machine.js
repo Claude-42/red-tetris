@@ -24,12 +24,12 @@ export function useMachine(machine, options = {}) {
     actions,
     activities,
     services,
-    delays
+    delays,
   };
 
   const createdMachine = machine.withConfig(machineConfig, {
     ...machine.context,
-    ...context
+    ...context,
   });
 
   const service = interpret(createdMachine, interpreterOptions).start(
@@ -39,7 +39,7 @@ export function useMachine(machine, options = {}) {
   const state = shallowRef(service.state);
 
   onMounted(() => {
-    service.onTransition(currentState => {
+    service.onTransition((currentState) => {
       if (currentState.changed) {
         state.value = currentState;
       }
@@ -63,7 +63,7 @@ export function useService(service) {
     serviceRef,
     (service, _, onCleanup) => {
       state.value = service.state;
-      const { unsubscribe } = service.subscribe(currentState => {
+      const { unsubscribe } = service.subscribe((currentState) => {
         if (currentState.changed) {
           state.value = currentState;
         }
@@ -71,11 +71,11 @@ export function useService(service) {
       onCleanup(() => unsubscribe());
     },
     {
-      immediate: true
+      immediate: true,
     }
   );
 
-  const send = event => serviceRef.value.send(event);
+  const send = (event) => serviceRef.value.send(event);
 
   return { state, send, service: serviceRef };
 }

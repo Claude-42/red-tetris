@@ -4,7 +4,7 @@ export const PIECE_MOVEMENTS = {
   FALL: "FALL",
   LEFT: "LEFT",
   RIGHT: "RIGHT",
-  ROTATE: "ROTATE"
+  ROTATE: "ROTATE",
 };
 
 export const CASE_COLOR_MAP = new Map([
@@ -17,7 +17,7 @@ export const CASE_COLOR_MAP = new Map([
   [8, "YELLOW"],
 
   [9, "BLOCKED"],
-  [0, "BACKGROUND"]
+  [0, "BACKGROUND"],
 ]);
 
 export const CASE_COLOR = {
@@ -30,5 +30,5 @@ export const CASE_COLOR = {
   YELLOW: "YELLOW",
 
   BACKGROUND: "BACKGROUND",
-  EMPTY: "EMPTY"
+  EMPTY: "EMPTY",
 };

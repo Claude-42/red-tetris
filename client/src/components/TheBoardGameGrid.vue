@@ -26,20 +26,20 @@ export default {
   props: {
     grid: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
 
   setup() {
     const { move } = useGrid();
 
-    useEvent(window, "keyup", event => {
+    useEvent(window, "keyup", (event) => {
       const keyToMoveMap = new Map([
         ["ArrowDown", PIECE_MOVEMENTS.DOWN],
         [" ", PIECE_MOVEMENTS.FALL],
         ["ArrowLeft", PIECE_MOVEMENTS.LEFT],
         ["ArrowRight", PIECE_MOVEMENTS.RIGHT],
-        ["ArrowUp", PIECE_MOVEMENTS.ROTATE]
+        ["ArrowUp", PIECE_MOVEMENTS.ROTATE],
       ]);
 
       const movement = keyToMoveMap.get(event.key);
@@ -52,7 +52,7 @@ export default {
   },
 
   components: {
-    GridBox
-  }
+    GridBox,
+  },
 };
 </script>

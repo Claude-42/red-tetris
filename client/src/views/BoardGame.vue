@@ -9,7 +9,7 @@ import TheBoardGameManager from "../components/TheBoardGameManager.vue";
 
 export default {
   components: {
-    TheBoardGameManager
-  }
+    TheBoardGameManager,
+  },
 };
 </script>

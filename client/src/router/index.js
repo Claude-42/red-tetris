@@ -6,17 +6,17 @@ import BoardGame from "../views/BoardGame.vue";
 const routes = [
   {
     path: "/",
-    component: Home
+    component: Home,
   },
   {
     path: "/board-game",
-    component: BoardGame
-  }
+    component: BoardGame,
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
+  routes,
 });
 
 export default router;

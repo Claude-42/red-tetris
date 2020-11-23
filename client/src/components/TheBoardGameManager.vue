@@ -2,9 +2,7 @@
   <div>
     <TheBoardGameGrid :grid="grid" />
 
-    <button @click="startGame">
-      Start game
-    </button>
+    <button @click="startGame">Start game</button>
   </div>
 </template>
 
@@ -15,7 +13,7 @@ import { useGrid } from "../composables/grid.js";
 
 export default {
   components: {
-    TheBoardGameGrid
+    TheBoardGameGrid,
   },
 
   setup() {
@@ -23,8 +21,8 @@ export default {
 
     return {
       grid,
-      startGame
+      startGame,
     };
-  }
+  },
 };
 </script>
