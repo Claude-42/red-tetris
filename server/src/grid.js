@@ -40,6 +40,10 @@ class Grid {
     this.currentPiece++
     const nextPiece = this.masterPiece.nextPiece(this.currentPiece)
     this.piece = new Piece(nextPiece)
+    if (!this.piece.isIntersecting(this.lockGrid)) {
+      return false
+    }
+    return true
   }
 
   putPieceInGrid () {
