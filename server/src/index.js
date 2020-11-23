@@ -37,7 +37,7 @@ io.on('connection', (socket) => {
     sendData(socket)
   })
 
-  socket.on('move', ({ type }) => {
+  socket.on('move', async ({ type }) => {
     let TMP_DOWN = 0
     if (type === 'DOWN_AUTOMATIC') {
       type = 'DOWN'
@@ -46,9 +46,9 @@ io.on('connection', (socket) => {
 
     if ((grid.handleMove(type).status === 'ERROR' && TMP_DOWN === 1) || type === 'FALL') {
       grid.putPieceInGrid()
+      grid.popLine()
       if (grid.nextPiece()) {
         socket.emit('gameOver')
-        console.log('game over !')
       }
     }
 

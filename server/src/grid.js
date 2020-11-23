@@ -36,6 +36,30 @@ class Grid {
     this.nextPiece(masterPiece)
   }
 
+  popLine () {
+    const rowsToKeep = this.lockGrid.map((row) => {
+      if (row.some(col => col === CASE_COLOR.EMPTY)) {
+        return row
+      }
+
+      return undefined
+    }).filter(Boolean)
+    const deletedRowsCount = 20 - rowsToKeep.length
+
+    if (deletedRowsCount === 0) {
+      return 0
+    }
+
+    this.lockGrid = Array(deletedRowsCount)
+      .fill()
+      .map(() =>
+        Array(10)
+          .fill(0)
+      ).concat(rowsToKeep)
+
+    return deletedRowsCount
+  }
+
   nextPiece () {
     this.currentPiece++
     const nextPiece = this.masterPiece.nextPiece(this.currentPiece)
