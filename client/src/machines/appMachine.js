@@ -128,7 +128,7 @@ export const appMachine = Machine(
               socket.emit("move", { type: "DOWN" });
               break;
             case "MOVE.DOWN_AUTOMATIC":
-              socket.emit("move", { type: "DOWN" });
+              socket.emit("move", { type: "DOWN_AUTOMATIC" });
               break;
             case "MOVE.LEFT":
               socket.emit("move", { type: "LEFT" });
