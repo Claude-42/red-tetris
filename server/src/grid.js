@@ -33,7 +33,8 @@ class Grid {
     this.masterPiece = masterPiece
 
     this.currentPiece = -1
-    this.nextPiece(masterPiece)
+    this.piece = undefined
+    this.nextPiece()
   }
 
   popLine () {

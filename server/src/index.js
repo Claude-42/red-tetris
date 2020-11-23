@@ -28,16 +28,13 @@ function sendData (socket) {
   socket.emit('ownGrid', { PAINT_GRID: grid.simulatePieceInGrid(), NEXT_PIECE: grid.NEXT_PIECE })
 }
 
-// function makeMove (move) {
-//   return grid.handleMove(move)
-// }
-
 io.on('connection', (socket) => {
   socket.on('start', payload => {
     sendData(socket)
   })
 
   socket.on('move', async ({ type }) => {
+    let isGameOver = false
     let TMP_DOWN = 0
     if (type === 'DOWN_AUTOMATIC') {
       type = 'DOWN'
@@ -48,10 +45,14 @@ io.on('connection', (socket) => {
       grid.putPieceInGrid()
       grid.popLine()
       if (grid.nextPiece()) {
-        socket.emit('gameOver')
+        isGameOver = true
       }
     }
 
     sendData(socket)
+
+    if (isGameOver) {
+      socket.emit('gameOver')
+    }
   })
 })
