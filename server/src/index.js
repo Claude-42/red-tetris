@@ -38,7 +38,17 @@ io.on('connection', (socket) => {
   })
 
   socket.on('move', ({ type }) => {
-    grid.handleMove(type)
+    let TMP_DOWN = 0
+    if (type === 'DOWN_AUTOMATIC') {
+      type = 'DOWN'
+      TMP_DOWN = 1
+    }
+
+    if (grid.handleMove(type) === 'ERROR' && TMP_DOWN === 1) {
+      grid.putPieceInGrid()
+      grid.nextPiece()
+    }
+
     sendData(socket)
   })
 })

@@ -29,15 +29,23 @@ class Grid {
         Array(10)
           .fill(0)
       )
-    this.currentPiece = 0
-    const nextPiece = masterPiece.nextPiece(this.currentPiece)
+
+    this.masterPiece = masterPiece
+
+    this.currentPiece = -1
+    this.nextPiece(masterPiece)
+  }
+
+  nextPiece () {
+    this.currentPiece++
+    const nextPiece = this.masterPiece.nextPiece(this.currentPiece)
     this.piece = new Piece(nextPiece)
   }
 
   putPieceInGrid () {
     const pieceCoordinates = this.piece.toGlobalCoordinates()
 
-    pieceCoordinates.forEach((x, y) => {
+    pieceCoordinates.forEach(({ x, y }) => {
       this.lockGrid[y][x] = CASE_COLOR[this.piece.color]
     })
   }
