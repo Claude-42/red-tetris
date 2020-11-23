@@ -46,8 +46,9 @@ io.on('connection', (socket) => {
 
     if ((grid.handleMove(type).status === 'ERROR' && TMP_DOWN === 1) || type === 'FALL') {
       grid.putPieceInGrid()
-      if (!grid.nextPiece()) {
+      if (grid.nextPiece()) {
         socket.emit('gameOver')
+        console.log('game over !')
       }
     }
 
