@@ -33,7 +33,7 @@ export default {
   setup() {
     const { move } = useGrid();
 
-    useEvent(window, "keyup", (event) => {
+    useEvent(window, "keydown", (event) => {
       const keyToMoveMap = new Map([
         ["ArrowDown", PIECE_MOVEMENTS.DOWN],
         [" ", PIECE_MOVEMENTS.FALL],
