@@ -32,70 +32,80 @@ export const appMachine = Machine(
         },
       },
       playing: {
-        type: "parallel",
+        initial: "playing",
         states: {
-          moving: {
-            initial: "idle",
+          playing: {
+            type: "parallel",
             states: {
-              idle: {
-                on: {
-                  "MOVE.ROTATE": {
-                    target: "debounce",
-                    actions: "forwardToWebsocket",
+              moving: {
+                initial: "idle",
+                states: {
+                  idle: {
+                    on: {
+                      "MOVE.ROTATE": {
+                        target: "debounce",
+                        actions: "forwardToWebsocket",
+                      },
+                      "MOVE.LEFT": {
+                        target: "debounce",
+                        actions: "forwardToWebsocket",
+                      },
+                      "MOVE.RIGHT": {
+                        target: "debounce",
+                        actions: "forwardToWebsocket",
+                      },
+                      "MOVE.DOWN": {
+                        target: "debounce",
+                        actions: "forwardToWebsocket",
+                      },
+                      "MOVE.DOWN_AUTOMATIC": {
+                        target: "debounce",
+                        actions: "forwardToWebsocket",
+                      },
+                      "MOVE.FALL": {
+                        target: "debounce",
+                        actions: "forwardToWebsocket",
+                      },
+                    },
                   },
-                  "MOVE.LEFT": {
-                    target: "debounce",
-                    actions: "forwardToWebsocket",
-                  },
-                  "MOVE.RIGHT": {
-                    target: "debounce",
-                    actions: "forwardToWebsocket",
-                  },
-                  "MOVE.DOWN": {
-                    target: "debounce",
-                    actions: "forwardToWebsocket",
-                  },
-                  "MOVE.DOWN_AUTOMATIC": {
-                    target: "debounce",
-                    actions: "forwardToWebsocket",
-                  },
-                  "MOVE.FALL": {
-                    target: "debounce",
-                    actions: "forwardToWebsocket",
+                  debounce: {
+                    after: {
+                      [DEBOUNCE_TIME]: "idle",
+                    },
                   },
                 },
               },
-              debounce: {
-                after: {
-                  [DEBOUNCE_TIME]: "idle",
+              moveDownTimer: {
+                initial: "idle",
+                states: {
+                  idle: {
+                    after: {
+                      [GO_DOWN_TIME]: "inc",
+                    },
+                  },
+                  inc: {
+                    entry: "sendAutomaticDownToWebsocket",
+                    on: {
+                      "": "idle",
+                    },
+                  },
                 },
               },
             },
-          },
-          moveDownTimer: {
-            initial: "idle",
-            states: {
-              idle: {
-                after: {
-                  [GO_DOWN_TIME]: "inc",
-                },
+            on: {
+              UPDATE_GRID_DATA: {
+                actions: assign({
+                  grid: (_context, { payload: { PAINT_GRID } }) => PAINT_GRID,
+                  nextPiece: ({ NEXT_PIECE }) => NEXT_PIECE,
+                }),
               },
-              inc: {
-                entry: "sendAutomaticDownToWebsocket",
-                on: {
-                  "": "idle",
-                },
+
+              GAME_OVER: {
+                target: "end",
               },
             },
           },
-        },
-        on: {
-          UPDATE_GRID_DATA: {
-            actions: assign({
-              grid: (_context, { payload: { PAINT_GRID } }) => PAINT_GRID,
-              nextPiece: ({ NEXT_PIECE }) => NEXT_PIECE,
-            }),
-          },
+          end: {},
         },
       },
     },
@@ -113,6 +123,12 @@ export const appMachine = Machine(
           callback({
             type: "UPDATE_GRID_DATA",
             payload,
+          });
+        });
+
+        socket.on("gameOver", () => {
+          callback({
+            type: "GAME_OVER",
           });
         });
 
