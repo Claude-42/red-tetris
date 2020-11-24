@@ -175,4 +175,4 @@ class Piece {
   }
 }
 
-module.exports = { Piece, PIECE_TYPE }
+module.exports = { Piece, PIECE_TYPE, PIECES }

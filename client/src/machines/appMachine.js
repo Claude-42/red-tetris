@@ -96,7 +96,8 @@ export const appMachine = Machine(
               UPDATE_GRID_DATA: {
                 actions: assign({
                   grid: (_context, { payload: { PAINT_GRID } }) => PAINT_GRID,
-                  nextPiece: ({ NEXT_PIECE }) => NEXT_PIECE,
+                  nextPiece: (_context, { payload: { NEXT_PIECE } }) =>
+                    NEXT_PIECE,
                 }),
               },
 

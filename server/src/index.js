@@ -4,6 +4,7 @@ const SocketIO = require('socket.io')
 const cors = require('cors')
 const { MasterPiece } = require('./masterpiece')
 const { Grid } = require('./grid')
+const { Game } = require('./game')
 
 const PORT = 3030
 
@@ -23,14 +24,56 @@ const io = SocketIO(server)
 
 const masterpiece = new MasterPiece()
 const grid = new Grid(masterpiece)
+const gamesList = []
 
 function sendData (socket) {
-  socket.emit('ownGrid', { PAINT_GRID: grid.simulatePieceInGrid(), NEXT_PIECE: grid.NEXT_PIECE })
+  socket.emit('ownGrid', { PAINT_GRID: grid.simulatePieceInGrid(), NEXT_PIECE: masterpiece.sendNextPiece(grid.currentPiece + 1) })
+}
+
+function newGame (playerName, playerId, lobbyName) {
+  let isNewGame = true
+  gamesList.forEach(elt => {
+    if (elt.name === lobbyName) {
+      if (elt.usersList.length > 5) {
+        return 'FULL'
+      }
+      if (elt.inGame === true) {
+        return 'IN_GAME'
+      }
+      elt.addUser(playerName, playerId)
+      isNewGame = false
+    }
+  })
+  if (isNewGame === true) {
+    const newGame = new Game(lobbyName)
+    newGame.addUser(playerName, playerId)
+    gamesList.push(newGame)
+  }
+  return 'OK'
 }
 
 io.on('connection', (socket) => {
-  socket.on('start', payload => {
-    sendData(socket)
+  socket.on('JOIN_LOBBY', ({ playerName, lobbyName }) => {
+    const ret = newGame(playerName, socket.id, lobbyName)
+    socket.join(lobbyName)
+    io.to(socket.id).emmit('ROOM_STATUS', ret)
+    io.to(lobbyName).emmit('PLAYER_JOINED_GAME', gamesList.find(elt => elt.name === lobbyName).usersList)
+  })
+
+  // socket.on('start', payload => {
+  //   sendData(socket)
+  // })
+
+  socket.on('QUIT_LOBBY', (lobbyName) => {
+    if (gamesList.find(elt => elt.name === lobbyName).delUser(socket.id) === 'DELETE_ME') {
+      gamesList.splice(this.usersList.find(elt => elt.name === lobbyName), 1)
+    }
+  })
+
+  socket.on('GET_ALL_LOBBIES', () => {
+    io.to(socket.id).emmit('GET_ALL_LOBBIES', gamesList.map((elt) => {
+      return elt.name
+    }))
   })
 
   socket.on('move', async ({ type }) => {

@@ -1,0 +1,32 @@
+<template>
+  <div class="border border-gray-300">
+    <div
+      v-for="(columns, rowIndex) in nextPiece"
+      :key="`row:${rowIndex}`"
+      class="flex"
+    >
+      <GridBox
+        v-for="(boxType, colIndex) in columns"
+        :key="`col:${rowIndex}:${colIndex}`"
+        :type="boxType"
+      />
+    </div>
+  </div>
+</template>
+
+<script>
+import GridBox from "./GridBox.vue";
+
+export default {
+  props: {
+    nextPiece: {
+      type: Array,
+      required: true,
+    },
+  },
+
+  components: {
+    GridBox,
+  },
+};
+</script>

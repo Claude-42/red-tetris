@@ -160,6 +160,21 @@ class Grid {
       tmpPiece.isIntersecting(this.lockGrid)
     )
   }
+
+  makeMeShadow () {
+    const emptyColumn = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+    return this.lockGrid.map((row) => {
+      return row.map((column, index) => {
+        if (column === CASE_COLOR.EMPTY === emptyColumn[index]) {
+          return 0
+        } else {
+          emptyColumn[index] = 1
+          return 1
+        }
+      })
+    })
+  }
 }
 
-module.exports = { Grid, MOVE }
+module.exports = { Grid, MOVE, CASE_COLOR }

@@ -7,6 +7,7 @@ export function useGrid() {
   const { appMachineState, appMachineSend } = useAppMachine();
 
   const grid = computed(() => appMachineState.value.context.grid);
+  const nextPiece = computed(() => appMachineState.value.context.nextPiece);
 
   function move(movement) {
     if (!Reflect.has(PIECE_MOVEMENTS, movement)) {
@@ -22,6 +23,7 @@ export function useGrid() {
 
   return {
     grid,
+    nextPiece,
 
     move,
     startGame,

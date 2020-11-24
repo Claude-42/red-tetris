@@ -1,3 +1,6 @@
+const { PIECES } = require('./piece')
+const { CASE_COLOR } = require('./grid')
+
 function getRandomArbitrary (min, max) {
   return Math.random() * (max - min) + min
 }
@@ -6,6 +9,19 @@ class MasterPiece {
   constructor () {
     this.pieces = []
     this.newSet()
+  }
+
+  sendNextPiece (nb) {
+    const newPiece = this.nextPiece(nb)
+
+    return PIECES[newPiece].map((row) => {
+      return row.map((column) => {
+        if (column === 1) {
+          return CASE_COLOR[newPiece]
+        }
+        return CASE_COLOR.EMPTY
+      })
+    })
   }
 
   newSet () {
@@ -21,7 +37,9 @@ class MasterPiece {
   }
 
   nextPiece (nb) {
-    if (this.pieces[nb] === undefined) { this.newSet() }
+    if (this.pieces[nb] === undefined) {
+      this.newSet()
+    }
     return (this.pieces[nb])
   }
 }
