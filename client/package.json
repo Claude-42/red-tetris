@@ -9,6 +9,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@tailwindcss/forms": "^0.2.1",
     "autoprefixer": "^9.8.6",
     "core-js": "^3.7.0",
     "postcss": "^7.0.35",
@@ -16,12 +17,14 @@
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.1",
     "vue": "^3.0.0",
     "vue-composable": "^1.0.0-beta.12",
+    "vue-i18n": "^9.0.0-beta.8",
     "vue-router": "^4.0.0-rc.5",
     "vue-socket.io": "^3.0.10",
     "vuex": "^4.0.0-0",
     "xstate": "^4.14.0"
   },
   "devDependencies": {
+    "@intlify/vue-i18n-loader": "^2.0.0-beta.1",
     "@vue/cli-plugin-babel": "~4.5.9",
     "@vue/cli-plugin-eslint": "~4.5.9",
     "@vue/cli-plugin-router": "~4.5.9",

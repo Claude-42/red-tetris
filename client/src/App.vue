@@ -1,13 +1,18 @@
 <template>
-  <TheHeader />
+  <div class="flex flex-col min-h-screen bg-gray-100">
+    <TheHeader />
 
-  <router-view />
+    <main class="flex-grow">
+      <router-view />
+    </main>
+  </div>
 </template>
 
 <script>
 import TheHeader from "./components/TheHeader.vue";
 
-import { useProvideAppMachine } from "./composables/app.js";
+import { useAppMachineProvider } from "./composables/app.js";
+import { useDefaultBrowserLanguage } from "./composables/language.js";
 
 export default {
   components: {
@@ -15,7 +20,9 @@ export default {
   },
 
   setup() {
-    useProvideAppMachine();
+    useAppMachineProvider();
+
+    useDefaultBrowserLanguage();
   },
 };
 </script>

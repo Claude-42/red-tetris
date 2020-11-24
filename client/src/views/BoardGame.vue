@@ -1,7 +1,7 @@
 <template>
-  <div class="flex justify-center">
+  <section class="flex items-center justify-center">
     <TheBoardGameManager />
-  </div>
+  </section>
 </template>
 
 <script>

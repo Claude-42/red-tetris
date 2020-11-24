@@ -1,10 +1,10 @@
 import { computed } from "vue";
 
-import { useAppMachine } from "../composables/app.js";
+import { useAppMachineContext } from "../composables/app.js";
 import { PIECE_MOVEMENTS } from "../constants/piece.js";
 
 export function useGrid() {
-  const { appMachineState, appMachineSend } = useAppMachine();
+  const { appMachineState, appMachineSend } = useAppMachineContext();
 
   const grid = computed(() => appMachineState.value.context.grid);
   const nextPiece = computed(() => appMachineState.value.context.nextPiece);
