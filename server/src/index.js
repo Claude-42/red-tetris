@@ -69,7 +69,7 @@ io.on('connection', (socket) => {
 
   socket.on('LAUNCH_GAME', ({ lobbyName }) => {
     const tmpGame = gamesList.find(elt => elt.name === lobbyName)
-    if (tmpGame === undefined) {
+    if (tmpGame === undefined || tmpGame.usersList[0].id === socket.id) {
       return
     }
     tmpGame.startGame()
