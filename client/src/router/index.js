@@ -5,6 +5,7 @@ import GamesList from "../views/GamesList.vue";
 import BoardGame from "../views/BoardGame.vue";
 import Game from "../views/Game.vue";
 import CreateGame from "../views/CreateGame.vue";
+import GameFull from "../views/GameFull.vue";
 
 const routes = [
   {
@@ -22,6 +23,10 @@ const routes = [
   {
     path: "/game/:id",
     component: Game,
+  },
+  {
+    path: "/game-full",
+    component: GameFull,
   },
   {
     path: "/board-game",
