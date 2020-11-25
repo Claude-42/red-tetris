@@ -86,12 +86,20 @@ export const appMachine = Machine(
         after: {
           1000: "waitingToStartLobby",
         },
+        on: {
+          SET_LOBBY_PLAYERS: {
+            actions: "setLobbyPlayers",
+          },
+        },
       },
       waitingToStartLobby: {
         on: {
           START_GAME: {
             target: "playing",
             actions: "sendStartGameToWebsocket",
+          },
+          SET_LOBBY_PLAYERS: {
+            actions: "setLobbyPlayers",
           },
         },
       },
@@ -171,6 +179,11 @@ export const appMachine = Machine(
             },
           },
           end: {},
+        },
+        on: {
+          SET_LOBBY_PLAYERS: {
+            actions: "setLobbyPlayers",
+          },
         },
       },
     },
