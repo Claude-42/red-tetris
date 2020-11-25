@@ -56,8 +56,8 @@ io.on('connection', (socket) => {
   socket.on('JOIN_LOBBY', ({ playerName, lobbyName }) => {
     const ret = newGame(playerName, socket.id, lobbyName)
     socket.join(lobbyName)
-    io.to(socket.id).emmit('ROOM_STATUS', ret)
-    io.to(lobbyName).emmit('PLAYER_JOINED_GAME', gamesList.find(elt => elt.name === lobbyName).usersList)
+    io.to(socket.id).emit('ROOM_STATUS', ret)
+    io.to(lobbyName).emit('PLAYER_JOINED_GAME', gamesList.find(elt => elt.name === lobbyName).usersList)
   })
 
   // socket.on('start', payload => {
@@ -71,7 +71,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('GET_ALL_LOBBIES', () => {
-    io.to(socket.id).emmit('GET_ALL_LOBBIES', gamesList.map((elt) => {
+    io.to(socket.id).emit('GET_ALL_LOBBIES', gamesList.map((elt) => {
       return elt.name
     }))
   })
