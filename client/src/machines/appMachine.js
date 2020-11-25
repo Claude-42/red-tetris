@@ -287,26 +287,31 @@ export const appMachine = Machine(
               });
               break;
             }
-            case "START_GAME":
-              socket.emit("start");
+            case "START_GAME": {
+              const { lobbyName } = event.data;
+
+              socket.emit("LAUNCH_GAME", {
+                lobbyName,
+              });
               break;
+            }
             case "MOVE.ROTATE":
-              socket.emit("move", { type: "ROTATE" });
+              socket.emit("MOVE", { type: "ROTATE" });
               break;
             case "MOVE.DOWN":
-              socket.emit("move", { type: "DOWN" });
+              socket.emit("MOVE", { type: "DOWN" });
               break;
             case "MOVE.DOWN_AUTOMATIC":
-              socket.emit("move", { type: "DOWN_AUTOMATIC" });
+              socket.emit("MOVE", { type: "DOWN_AUTOMATIC" });
               break;
             case "MOVE.LEFT":
-              socket.emit("move", { type: "LEFT" });
+              socket.emit("MOVE", { type: "LEFT" });
               break;
             case "MOVE.RIGHT":
-              socket.emit("move", { type: "RIGHT" });
+              socket.emit("MOVE", { type: "RIGHT" });
               break;
             case "MOVE.FALL":
-              socket.emit("move", { type: "FALL" });
+              socket.emit("MOVE", { type: "FALL" });
               break;
           }
         });
@@ -317,7 +322,15 @@ export const appMachine = Machine(
       },
     },
     actions: {
-      sendStartGameToWebsocket: send("START_GAME", { to: "websocket" }),
+      sendStartGameToWebsocket: send(
+        ({ lobbyName }) => ({
+          type: "START_GAME",
+          data: {
+            lobbyName,
+          },
+        }),
+        { to: "websocket" }
+      ),
       forwardToWebsocket: forwardTo("websocket"),
       sendAutomaticDownToWebsocket: send("MOVE.DOWN_AUTOMATIC", {
         to: "websocket",
