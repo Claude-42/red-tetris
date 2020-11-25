@@ -144,5 +144,14 @@ io.on('connection', (socket) => {
     if (isGameOver) {
       socket.emit('GAME_OVER')
     }
+
+    const shadowGridList = tmpGame.usersList.map(elt => {
+      if (elt.name === tmpPlayer.name) {
+        return undefined
+      }
+      return elt.makeMeShadow()
+    }).filter(Boolean)
+
+    io.to(tmpGame.name).emit('NEW_SHADOW', shadowGridList)
   })
 })
