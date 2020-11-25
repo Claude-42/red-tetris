@@ -83,13 +83,23 @@ io.on('connection', (socket) => {
   })
 
   socket.on('LAUNCH_GAME', ({ lobbyName }) => {
-    const tmpGame = gamesList.find(elt => elt.name === lobbyName)
-    if (tmpGame === undefined || tmpGame.usersList[0].id === socket.id) {
+    const game = gamesList.find(elt => elt.name === lobbyName)
+    if (game === undefined) {
       return
     }
-    tmpGame.startGame()
-    tmpGame.usersList.forEach(elt => {
-      io.to(socket[elt.id]).emit('OWN_GRID', { PAINT_GRID: elt.grid.simulatePieceInGrid(), NEXT_PIECE: tmpGame.masterpiece.sendNextPiece(elt.grid.currentPiece + 1) })
+
+    const isGameOwner = game.usersList.some(({ id, owner }) => id === socket.id && owner === true)
+    if (!isGameOwner) {
+      return
+    }
+
+    game.startGame()
+
+    game.usersList.forEach(player => {
+      io.to(player.id).emit('OWN_GRID', {
+        PAINT_GRID: player.grid.simulatePieceInGrid(),
+        NEXT_PIECE: game.masterpiece.sendNextPiece(player.grid.currentPiece + 1)
+      })
     })
   })
 
