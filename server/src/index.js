@@ -26,9 +26,9 @@ const masterpiece = new MasterPiece()
 const grid = new Grid(masterpiece)
 const gamesList = []
 
-function sendData (socket) {
-  socket.emit('ownGrid', { PAINT_GRID: grid.simulatePieceInGrid(), NEXT_PIECE: masterpiece.sendNextPiece(grid.currentPiece + 1) })
-}
+// function sendData (socket) {
+//   socket.emit('ownGrid', { PAINT_GRID: grid.simulatePieceInGrid(), NEXT_PIECE: masterpiece.sendNextPiece(grid.currentPiece + 1) })
+// }
 
 function newGame (playerName, playerId, lobbyName) {
   let isNewGame = true
@@ -66,9 +66,16 @@ io.on('connection', (socket) => {
     }
   })
 
-  // socket.on('start', payload => {
-  //   sendData(socket)
-  // })
+  socket.on('LAUNCH_GAME', ({ lobbyName }) => {
+    const tmpGame = gamesList.find(elt => elt.name === lobbyName)
+    if (tmpGame === undefined) {
+      return
+    }
+    tmpGame.startGame()
+    tmpGame.usersList.forEach(elt => {
+      io.to(socket[elt.id]).emit('ownGrid', { PAINT_GRID: elt.grid.simulatePieceInGrid(), NEXT_PIECE: tmpGame.masterpiece.sendNextPiece(elt.grid.currentPiece + 1) })
+    })
+  })
 
   socket.on('QUIT_LOBBY', (lobbyName) => {
     if (gamesList.find(elt => elt.name === lobbyName).delUser(socket.id) === 'DELETE_ME') {

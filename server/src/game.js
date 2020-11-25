@@ -1,4 +1,6 @@
 const { Player } = require('./player')
+const { MasterPiece } = require('./masterpiece')
+// const { Grid } = require('./grid')
 
 class Game {
   constructor (name) {
@@ -31,6 +33,13 @@ class Game {
 
   transferOwnerShip () {
     this.usersList[1].owner = true
+  }
+
+  startGame () {
+    this.masterpiece = new MasterPiece()
+    this.usersList.forEach(elt => {
+      elt.startGame(this.masterpiece)
+    })
   }
 }
 

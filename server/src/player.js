@@ -1,3 +1,5 @@
+const { Grid } = require('./grid')
+
 class Player {
   constructor (name, id) {
     this.name = name
@@ -10,8 +12,9 @@ class Player {
     this.owner = true
   }
 
-  startGame () {
+  startGame (masterpiece) {
     this.inGame = true
+    this.grid = new Grid(masterpiece)
   }
 }
 
