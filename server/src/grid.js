@@ -35,6 +35,7 @@ class Grid {
     this.currentPiece = -1
     this.piece = undefined
     this.nextPiece()
+    this.score = 0
   }
 
   popLine () {
@@ -58,6 +59,20 @@ class Grid {
           .fill(0)
       ).concat(rowsToKeep)
 
+    switch (deletedRowsCount) {
+      case deletedRowsCount === 1:
+        this.score += 40
+        break
+      case deletedRowsCount === 2:
+        this.score += 100
+        break
+      case deletedRowsCount === 3:
+        this.score += 300
+        break
+      case deletedRowsCount === 4:
+        this.score += 1200
+        break
+    }
     return deletedRowsCount
   }
 
@@ -109,6 +124,7 @@ class Grid {
   applyMove (move) {
     switch (move) {
       case MOVE.DOWN:
+        this.score++
         this.piece.goDown()
         break
       case MOVE.LEFT:
@@ -121,10 +137,8 @@ class Grid {
         this.piece.applyRotationAndRecalibrate()
         break
       case MOVE.FALL: {
-        let i = 0
-        while (this.canApplyMove(MOVE.DOWN) && i < 100) {
+        while (this.canApplyMove(MOVE.DOWN)) {
           this.piece.goDown()
-          i++
         }
         break
       }
