@@ -9,6 +9,8 @@ export const appMachine = Machine(
   {
     id: "app",
     context: {
+      username: undefined,
+
       grid: undefined,
       nextPiece: undefined,
     },
@@ -110,6 +112,11 @@ export const appMachine = Machine(
         },
       },
     },
+    on: {
+      SET_USERNAME: {
+        actions: "setUsername",
+      },
+    },
   },
   {
     services: {
@@ -169,6 +176,13 @@ export const appMachine = Machine(
       forwardToWebsocket: forwardTo("websocket"),
       sendAutomaticDownToWebsocket: send("MOVE.DOWN_AUTOMATIC", {
         to: "websocket",
+      }),
+      setUsername: assign({
+        username: (_context, { data: username }) => {
+          console.log("username from state machine", username);
+
+          return username;
+        },
       }),
     },
   }

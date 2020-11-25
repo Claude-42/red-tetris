@@ -45,6 +45,7 @@ import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 import ChevronIcon from "../components/ChevronIcon.vue";
+import { useAppMachineContext } from "../composables/app";
 
 export default {
   name: "Home",
@@ -58,6 +59,8 @@ export default {
 
     const router = useRouter();
 
+    const { appMachineSend } = useAppMachineContext();
+
     function saveUsername({ target: form }) {
       const data = new FormData(form);
       const username = data.get("username").toString().trim();
@@ -65,7 +68,10 @@ export default {
         return;
       }
 
-      console.log("username", username);
+      appMachineSend({
+        type: "SET_USERNAME",
+        data: username,
+      });
 
       router.push("/games");
     }
