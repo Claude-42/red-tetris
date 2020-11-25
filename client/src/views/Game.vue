@@ -29,15 +29,15 @@ fr:
 
           <div class="flex items-center space-x-4">
             <button
-              to="/create-game"
               class="px-4 py-2 text-base text-gray-100 bg-blue-300 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400"
+              @click="startGame"
             >
               {{ t("start-game") }}
             </button>
 
             <button
-              to="/create-game"
               class="px-4 py-2 text-base text-white bg-red-500 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600"
+              @click="leaveGame"
             >
               {{ t("leave-game") }}
             </button>
@@ -133,8 +133,6 @@ export default {
     );
 
     watch(isLobbyFull, (isLobbyFull) => {
-      console.log("is lobby full", isLobbyFull);
-
       /**
        * If the game is full, redirect the user to /game-full page.
        */
@@ -145,6 +143,10 @@ export default {
       router.replace("/game-full");
     });
 
+    function startGame() {}
+
+    function leaveGame() {}
+
     return {
       state: appMachineState,
 
@@ -152,6 +154,9 @@ export default {
 
       lobbyName,
       playersByCategories,
+
+      startGame,
+      leaveGame,
     };
   },
 };

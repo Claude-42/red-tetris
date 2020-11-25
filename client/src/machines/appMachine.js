@@ -10,6 +10,7 @@ export const appMachine = Machine(
     id: "app",
     context: {
       username: undefined,
+      isOwner: undefined,
 
       lobbyName: undefined,
       lobbyStatus: undefined,
@@ -26,7 +27,26 @@ export const appMachine = Machine(
     states: {
       initializing: {
         on: {
-          SOCKET_CONNECTED: "waitingToJoinLobby",
+          SOCKET_CONNECTED: "usernameSelection",
+        },
+      },
+      usernameSelection: {
+        initial: "idle",
+        states: {
+          idle: {},
+          failure: {},
+        },
+        on: {
+          SET_USERNAME: {
+            actions: ["setUsername", "sendNewUserToWebsocket"],
+          },
+
+          SELECTION_SUCCESS: {
+            target: "waitingToJoinLobby",
+          },
+          SELECTION_FAIL: {
+            target: "usernameSelection.failure",
+          },
         },
       },
       waitingToJoinLobby: {
@@ -157,11 +177,6 @@ export const appMachine = Machine(
         },
       },
     },
-    on: {
-      SET_USERNAME: {
-        actions: "setUsername",
-      },
-    },
   },
   {
     services: {
@@ -170,6 +185,19 @@ export const appMachine = Machine(
 
         socket.on("connect", () => {
           callback("SOCKET_CONNECTED");
+        });
+
+        socket.on("NEW_USER", (status) => {
+          switch (status) {
+            case "OK":
+              callback("SELECTION_SUCCESS");
+              break;
+            case "FAIL":
+              callback("SELECTION_FAIL");
+              break;
+            default:
+              throw new Error("Invalid status received");
+          }
         });
 
         socket.on("ROOM_STATUS", (roomStatus) => {
@@ -212,6 +240,12 @@ export const appMachine = Machine(
 
         onReceive((event) => {
           switch (event.type) {
+            case "SET_USERNAME": {
+              const username = event.data;
+
+              socket.emit("NEW_USER", { userName: username });
+              break;
+            }
             case "JOIN_LOBBY": {
               const { lobbyName, playerName } = event.data;
               if (lobbyName === "" || playerName === "") {
@@ -260,12 +294,17 @@ export const appMachine = Machine(
         to: "websocket",
       }),
       setUsername: assign({
-        username: (_context, { data: username }) => {
-          console.log("username from state machine", username);
-
-          return username;
-        },
+        username: (_context, { data: username }) => username,
       }),
+      sendNewUserToWebsocket: send(
+        ({ username }) => ({
+          type: "SET_USERNAME",
+          data: username,
+        }),
+        {
+          to: "websocket",
+        }
+      ),
       sendJoinLobbyToWebsocket: send(
         ({ lobbyName, username }) => ({
           type: "JOIN_LOBBY",

@@ -2,10 +2,12 @@
 en:
   title: "My nickname"
   input-placeholder: "Fill my nickname"
+  invalid-username: "Nickname already taken"
 
 fr:
   title: "Mon pseudo"
   input-placeholder: "Saisir mon pseudo"
+  invalid-username: "Ce surnom est déjà pris"
 </i18n>
 
 <template>
@@ -28,6 +30,13 @@ fr:
         />
       </div>
 
+      <p
+        v-if="usernameInvalidRef"
+        class="w-full p-2 mt-2 text-center text-red-700 bg-red-200 border-2 border-red-500 rounded"
+      >
+        {{ t("invalid-username") }}
+      </p>
+
       <div class="flex justify-end w-full">
         <button
           type="submit"
@@ -41,6 +50,7 @@ fr:
 </template>
 
 <script>
+import { ref, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -56,10 +66,11 @@ export default {
 
   setup() {
     const { t } = useI18n();
-
     const router = useRouter();
 
-    const { appMachineSend } = useAppMachineContext();
+    const usernameInvalidRef = ref(false);
+
+    const { appMachineState, appMachineSend } = useAppMachineContext();
 
     function saveUsername({ target: form }) {
       const data = new FormData(form);
@@ -72,13 +83,24 @@ export default {
         type: "SET_USERNAME",
         data: username,
       });
-
-      router.push("/games");
     }
+
+    watchEffect(() => {
+      if (appMachineState.value.matches("waitingToJoinLobby")) {
+        router.push("/games");
+        return;
+      }
+
+      if (appMachineState.value.matches("usernameSelection.failure")) {
+        usernameInvalidRef.value = true;
+        return;
+      }
+    });
 
     return {
       t,
 
+      usernameInvalidRef,
       saveUsername,
     };
   },
