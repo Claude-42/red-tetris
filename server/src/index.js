@@ -25,6 +25,7 @@ const io = SocketIO(server)
 const masterpiece = new MasterPiece()
 const grid = new Grid(masterpiece)
 const gamesList = []
+const uniqueUser = []
 
 // function sendData (socket) {
 //   socket.emit('ownGrid', { PAINT_GRID: grid.simulatePieceInGrid(), NEXT_PIECE: masterpiece.sendNextPiece(grid.currentPiece + 1) })
@@ -87,6 +88,15 @@ io.on('connection', (socket) => {
     io.to(socket.id).emit('GET_ALL_LOBBIES', gamesList.map((elt) => {
       return elt.name
     }))
+  })
+
+  socket.on('NEW_USER', ({ userName }) => {
+    if (uniqueUser.includes(userName) === false) {
+      uniqueUser.push(userName)
+      socket.emit('NEW_USER', 'OK')
+    } else {
+      socket.emit('NEW_USER', 'FAIL')
+    }
   })
 
   socket.on('move', async ({ type }) => {
