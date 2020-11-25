@@ -106,9 +106,14 @@ export const appMachine = Machine(
           },
 
           UPDATE_GRID_DATA: {
-            target: "playing",
+            target: "readyToPlay",
             actions: "setGridData",
           },
+        },
+      },
+      readyToPlay: {
+        on: {
+          START_GAME: "playing",
         },
       },
       playing: {

@@ -78,7 +78,7 @@ fr:
 </template>
 
 <script>
-import { computed, onMounted, watch } from "vue";
+import { computed, onMounted, watch, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 
@@ -143,6 +143,12 @@ export default {
       }
 
       router.replace("/game-full");
+    });
+
+    watchEffect(() => {
+      if (appMachineState.value.matches("readyToPlay")) {
+        router.push("/board-game");
+      }
     });
 
     function startGame() {
