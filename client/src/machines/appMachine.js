@@ -78,10 +78,7 @@ export const appMachine = Machine(
 
           SET_LOBBY_PLAYERS: {
             target: "waitingToStartLobbyLoading",
-            actions: assign({
-              lobbyPlayersList: (_context, { data: playersList }) =>
-                playersList,
-            }),
+            actions: "setLobbyPlayers",
           },
         },
       },
@@ -225,14 +222,14 @@ export const appMachine = Machine(
           });
         });
 
-        socket.on("ownGrid", (payload) => {
+        socket.on("OWN_GRID", (payload) => {
           callback({
             type: "UPDATE_GRID_DATA",
             payload,
           });
         });
 
-        socket.on("gameOver", () => {
+        socket.on("GAME_OVER", () => {
           callback({
             type: "GAME_OVER",
           });
@@ -317,6 +314,13 @@ export const appMachine = Machine(
           to: "websocket",
         }
       ),
+      setLobbyPlayers: assign({
+        lobbyPlayersList: (_context, { data: playersList }) => playersList,
+        isOwner: ({ username }, { data: playersList }) =>
+          playersList.some(
+            ({ owner, name }) => name === username && owner === true
+          ),
+      }),
     },
   }
 );

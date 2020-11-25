@@ -29,6 +29,7 @@ fr:
 
           <div class="flex items-center space-x-4">
             <button
+              v-if="isOwner"
               class="px-4 py-2 text-base text-gray-100 bg-blue-300 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400"
               @click="startGame"
             >
@@ -131,6 +132,7 @@ export default {
     const isLobbyFull = computed(
       () => appMachineState.value.context.lobbyStatus === "FULL"
     );
+    const isOwner = computed(() => appMachineState.value.context.isOwner);
 
     watch(isLobbyFull, (isLobbyFull) => {
       /**
@@ -154,6 +156,7 @@ export default {
 
       lobbyName,
       playersByCategories,
+      isOwner,
 
       startGame,
       leaveGame,
