@@ -12,6 +12,8 @@ export const appMachine = Machine(
       username: undefined,
       isOwner: undefined,
 
+      availableLobbies: undefined,
+
       lobbyName: undefined,
       lobbyStatus: undefined,
       lobbyPlayersList: undefined,
@@ -50,7 +52,13 @@ export const appMachine = Machine(
         },
       },
       waitingToJoinLobby: {
+        entry: "getAllLobbies",
+
         on: {
+          SET_ALL_LOBBIES: {
+            actions: "setAllLobbies",
+          },
+
           JOIN_LOBBY: {
             actions: [
               assign({
@@ -197,6 +205,13 @@ export const appMachine = Machine(
           callback("SOCKET_CONNECTED");
         });
 
+        socket.on("GET_ALL_LOBBIES", (lobbies) => {
+          callback({
+            type: "SET_ALL_LOBBIES",
+            data: lobbies,
+          });
+        });
+
         socket.on("NEW_USER", (status) => {
           switch (status) {
             case "OK":
@@ -256,6 +271,9 @@ export const appMachine = Machine(
               socket.emit("NEW_USER", { userName: username });
               break;
             }
+            case "GET_ALL_LOBBIES":
+              socket.emit("GET_ALL_LOBBIES");
+              break;
             case "JOIN_LOBBY": {
               const { lobbyName, playerName } = event.data;
               if (lobbyName === "" || playerName === "") {
@@ -305,6 +323,12 @@ export const appMachine = Machine(
       }),
       setUsername: assign({
         username: (_context, { data: username }) => username,
+      }),
+      getAllLobbies: send("GET_ALL_LOBBIES", {
+        to: "websocket",
+      }),
+      setAllLobbies: assign({
+        availableLobbies: (_context, { data: lobbies }) => lobbies,
       }),
       sendNewUserToWebsocket: send(
         ({ username }) => ({
