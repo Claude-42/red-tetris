@@ -12,7 +12,7 @@ class Game {
     const tmpPlayer = new Player(name, id)
     if (this.owner === '') {
       this.owner = name
-      tmpPlayer.owner()
+      tmpPlayer.newOwner()
     }
     this.usersList.push(tmpPlayer)
   }

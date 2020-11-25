@@ -32,7 +32,8 @@ function sendData (socket) {
 
 function newGame (playerName, playerId, lobbyName) {
   let isNewGame = true
-  gamesList.forEach(elt => {
+
+  for (const elt of gamesList) {
     if (elt.name === lobbyName) {
       if (elt.usersList.length > 5) {
         return 'FULL'
@@ -43,7 +44,8 @@ function newGame (playerName, playerId, lobbyName) {
       elt.addUser(playerName, playerId)
       isNewGame = false
     }
-  })
+  }
+
   if (isNewGame === true) {
     const newGame = new Game(lobbyName)
     newGame.addUser(playerName, playerId)
@@ -55,8 +57,11 @@ function newGame (playerName, playerId, lobbyName) {
 io.on('connection', (socket) => {
   socket.on('JOIN_LOBBY', ({ playerName, lobbyName }) => {
     const ret = newGame(playerName, socket.id, lobbyName)
-    if (socket.join(lobbyName) !== 'FULL') {
-      io.to(socket.id).emit('ROOM_STATUS', ret)
+
+    socket.emit('ROOM_STATUS', ret)
+
+    if (ret !== 'FULL') {
+      socket.join(lobbyName)
       io.to(lobbyName).emit('PLAYER_JOINED_GAME', gamesList.find(elt => elt.name === lobbyName).usersList)
     }
   })
