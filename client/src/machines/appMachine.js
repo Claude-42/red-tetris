@@ -55,10 +55,6 @@ export const appMachine = Machine(
         entry: "getAllLobbies",
 
         on: {
-          SET_ALL_LOBBIES: {
-            actions: "setAllLobbies",
-          },
-
           JOIN_LOBBY: {
             actions: [
               assign({
@@ -103,11 +99,15 @@ export const appMachine = Machine(
       waitingToStartLobby: {
         on: {
           START_GAME: {
-            target: "playing",
             actions: "sendStartGameToWebsocket",
           },
           SET_LOBBY_PLAYERS: {
             actions: "setLobbyPlayers",
+          },
+
+          UPDATE_GRID_DATA: {
+            target: "playing",
+            actions: "setGridData",
           },
         },
       },
@@ -174,11 +174,7 @@ export const appMachine = Machine(
             },
             on: {
               UPDATE_GRID_DATA: {
-                actions: assign({
-                  grid: (_context, { payload: { PAINT_GRID } }) => PAINT_GRID,
-                  nextPiece: (_context, { payload: { NEXT_PIECE } }) =>
-                    NEXT_PIECE,
-                }),
+                actions: "setGridData",
               },
 
               GAME_OVER: {
@@ -193,6 +189,11 @@ export const appMachine = Machine(
             actions: "setLobbyPlayers",
           },
         },
+      },
+    },
+    on: {
+      SET_ALL_LOBBIES: {
+        actions: "setAllLobbies",
       },
     },
   },
@@ -357,6 +358,10 @@ export const appMachine = Machine(
           playersList.some(
             ({ owner, name }) => name === username && owner === true
           ),
+      }),
+      setGridData: assign({
+        grid: (_context, { payload: { PAINT_GRID } }) => PAINT_GRID,
+        nextPiece: (_context, { payload: { NEXT_PIECE } }) => NEXT_PIECE,
       }),
     },
   }

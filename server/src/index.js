@@ -37,10 +37,14 @@ function newGame (playerName, playerId, lobbyName) {
   for (const elt of gamesList) {
     if (elt.name === lobbyName) {
       if (elt.usersList.length > 5) {
-        return 'FULL'
+        return {
+          status: 'FULL'
+        }
       }
       if (elt.inGame === true) {
-        return 'IN_GAME'
+        return {
+          status: 'IN_GAME'
+        }
       }
       elt.addUser(playerName, playerId)
       isNewGame = false
@@ -52,16 +56,27 @@ function newGame (playerName, playerId, lobbyName) {
     newGame.addUser(playerName, playerId)
     gamesList.push(newGame)
   }
-  return 'OK'
+
+  return {
+    status: 'OK',
+    isNewGame
+  }
+}
+
+function getAllLobies () {
+  return gamesList.map(({ name }) => name)
 }
 
 io.on('connection', (socket) => {
   socket.on('JOIN_LOBBY', ({ playerName, lobbyName }) => {
-    const ret = newGame(playerName, socket.id, lobbyName)
+    const { status, isNewGame } = newGame(playerName, socket.id, lobbyName)
+    if (isNewGame) {
+      io.emit('GET_ALL_LOBBIES', getAllLobies())
+    }
 
-    socket.emit('ROOM_STATUS', ret)
+    socket.emit('ROOM_STATUS', status)
 
-    if (ret !== 'FULL') {
+    if (status !== 'FULL') {
       socket.join(lobbyName)
       io.to(lobbyName).emit('PLAYER_JOINED_GAME', gamesList.find(elt => elt.name === lobbyName).usersList)
     }
@@ -85,9 +100,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('GET_ALL_LOBBIES', () => {
-    io.to(socket.id).emit('GET_ALL_LOBBIES', gamesList.map((elt) => {
-      return elt.name
-    }))
+    io.to(socket.id).emit('GET_ALL_LOBBIES', getAllLobies())
   })
 
   socket.on('NEW_USER', ({ userName }) => {

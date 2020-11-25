@@ -145,7 +145,13 @@ export default {
       router.replace("/game-full");
     });
 
-    function startGame() {}
+    function startGame() {
+      if (isOwner.value !== true) {
+        return;
+      }
+
+      appMachineSend("START_GAME");
+    }
 
     function leaveGame() {}
 
