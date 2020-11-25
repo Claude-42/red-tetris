@@ -74,7 +74,7 @@ io.on('connection', (socket) => {
     }
     tmpGame.startGame()
     tmpGame.usersList.forEach(elt => {
-      io.to(socket[elt.id]).emit('ownGrid', { PAINT_GRID: elt.grid.simulatePieceInGrid(), NEXT_PIECE: tmpGame.masterpiece.sendNextPiece(elt.grid.currentPiece + 1) })
+      io.to(socket[elt.id]).emit('OWN_GRID', { PAINT_GRID: elt.grid.simulatePieceInGrid(), NEXT_PIECE: tmpGame.masterpiece.sendNextPiece(elt.grid.currentPiece + 1) })
     })
   })
 
