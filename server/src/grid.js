@@ -139,6 +139,7 @@ class Grid {
       case MOVE.FALL: {
         while (this.canApplyMove(MOVE.DOWN)) {
           this.piece.goDown()
+          this.score += 2
         }
         break
       }
