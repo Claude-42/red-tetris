@@ -99,26 +99,37 @@ io.on('connection', (socket) => {
     }
   })
 
-  socket.on('move', async ({ type }) => {
+  socket.on('MOVE', ({ type }) => {
     let isGameOver = false
     let TMP_DOWN = 0
+    let tmpPlayer
+    let tmpGame
+
     if (type === 'DOWN_AUTOMATIC') {
       type = 'DOWN'
       TMP_DOWN = 1
     }
 
-    if ((grid.handleMove(type).status === 'ERROR' && TMP_DOWN === 1) || type === 'FALL') {
-      grid.putPieceInGrid()
-      grid.popLine()
-      if (grid.nextPiece()) {
+    gamesList.forEach(elt => {
+      if (tmpPlayer !== undefined) {
+        return
+      }
+      tmpPlayer = elt.usersList.find(elt => elt.id === socket.id)
+      tmpGame = elt
+    })
+
+    if ((tmpPlayer.grid.handleMove(type).status === 'ERROR' && TMP_DOWN === 1) || type === 'FALL') {
+      tmpPlayer.grid.putPieceInGrid()
+      tmpPlayer.grid.popLine()
+      if (tmpPlayer.grid.nextPiece()) {
         isGameOver = true
       }
     }
 
-    sendData(socket)
+    socket.emit('OWN_GRID', { PAINT_GRID: tmpPlayer.grid.simulatePieceInGrid(), NEXT_PIECE: tmpGame.masterpiece.sendNextPiece(tmpPlayer.grid.currentPiece + 1) })
 
     if (isGameOver) {
-      socket.emit('gameOver')
+      socket.emit('GAME_OVER')
     }
   })
 })
