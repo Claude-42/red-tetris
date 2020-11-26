@@ -17,7 +17,7 @@ export const CASE_COLOR_MAP = new Map([
   [8, "YELLOW"],
 
   [9, "BLOCKED"],
-  [0, "BACKGROUND"],
+  [0, "EMPTY"],
 ]);
 
 export const CASE_COLOR = {
@@ -29,6 +29,6 @@ export const CASE_COLOR = {
   PURPLE: "PURPLE",
   YELLOW: "YELLOW",
 
-  BACKGROUND: "BACKGROUND",
+  BLOCKED: "BLOCKED",
   EMPTY: "EMPTY",
 };
