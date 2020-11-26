@@ -1,5 +1,5 @@
 <template>
-  <BoardGameGrid :grid="grid" />
+  <BoardGameGrid :grid="grid" small />
 </template>
 
 <script>
