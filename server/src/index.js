@@ -133,13 +133,20 @@ io.on('connection', (socket) => {
       TMP_DOWN = 1
     }
 
-    gamesList.forEach(elt => {
-      if (tmpPlayer !== undefined) {
-        return
+    for (const game of gamesList) {
+      const matchingPlayer = game.usersList.find((player) => player.id === socket.id)
+      if (matchingPlayer === undefined) {
+        continue
       }
-      tmpPlayer = elt.usersList.find(elt => elt.id === socket.id)
-      tmpGame = elt
-    })
+
+      tmpPlayer = matchingPlayer
+      tmpGame = game
+    }
+
+    if (tmpPlayer === undefined) {
+      console.info('Could not find the player')
+      return
+    }
 
     if ((tmpPlayer.grid.handleMove(type).status === 'ERROR' && TMP_DOWN === 1) || type === 'FALL') {
       tmpPlayer.grid.putPieceInGrid()
@@ -166,13 +173,11 @@ io.on('connection', (socket) => {
       socket.emit('GAME_OVER')
     }
 
-    const shadowGridList = tmpGame.usersList.map(elt => {
-      if (elt.name === tmpPlayer.name) {
-        return undefined
-      }
-      return { name: elt.name, grid: elt.grid.makeMeShadow() }
-    }).filter(Boolean)
+    const shadowGridsList = tmpGame.usersList.map(user => ({
+      name: user.name,
+      grid: user.grid.makeMeShadow()
+    }))
 
-    socket.broadcast.to(tmpGame.name).emit('NEW_SHADOW', shadowGridList)
+    socket.broadcast.in(tmpGame.name).emit('NEW_SHADOW', shadowGridsList)
   })
 })

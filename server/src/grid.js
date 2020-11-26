@@ -177,18 +177,35 @@ class Grid {
   }
 
   makeMeShadow () {
-    const emptyColumn = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    function invertGridAxis (grid) {
+      const xLength = grid[0]?.length
+      const yLength = grid?.length
+      if (xLength === undefined || yLength === undefined) {
+        throw new Error('Invalid input arrays')
+      }
 
-    return this.lockGrid.map((row) => {
-      return row.map((column, index) => {
-        if (column === CASE_COLOR.EMPTY === emptyColumn[index]) {
-          return 0
-        } else {
-          emptyColumn[index] = 1
-          return 1
-        }
-      })
+      return Array(xLength)
+        .fill()
+        .map(
+          (_, colIndex) => Array(yLength)
+            .fill()
+            .map((_, rowIndex) => grid[rowIndex][colIndex])
+        )
+    }
+
+    const invertedLockGrid = invertGridAxis(this.lockGrid)
+
+    const invertedLockGridWithFilledColumns = invertedLockGrid.map((column, colIndex) => {
+      const firstFullBlock = column.findIndex((row) => row !== CASE_COLOR.EMPTY)
+      if (firstFullBlock === -1) {
+        return column
+      }
+
+      return column
+        .map((_, rowIndex) => rowIndex >= firstFullBlock ? CASE_COLOR.BLOCKED : CASE_COLOR.EMPTY)
     })
+
+    return invertGridAxis(invertedLockGridWithFilledColumns)
   }
 
   blockLine (numberBlockedLines) {
