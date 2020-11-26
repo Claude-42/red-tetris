@@ -20,12 +20,9 @@ fr:
           {{ t("games") }}
         </h2>
 
-        <router-link
-          to="/create-game"
-          class="block px-4 py-2 text-base text-gray-100 bg-blue-300 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400"
-        >
+        <AppButton to="/create-game">
           {{ t("create-a-game") }}
-        </router-link>
+        </AppButton>
       </header>
 
       <ul v-if="games.length > 0" class="divide-y divide-opacity-5">
@@ -55,11 +52,14 @@ fr:
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
-import ChevronIcon from "../components/ChevronIcon.vue";
 import { useAppMachineContext } from "../composables/app";
+
+import AppButton from "../components/AppButton.vue";
+import ChevronIcon from "../components/ChevronIcon.vue";
 
 export default {
   components: {
+    AppButton,
     ChevronIcon,
   },
 

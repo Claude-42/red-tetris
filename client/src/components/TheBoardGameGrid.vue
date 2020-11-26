@@ -1,16 +1,6 @@
 <template>
-  <div class="border border-gray-300">
-    <div
-      v-for="(columns, rowIndex) in grid"
-      :key="`row:${rowIndex}`"
-      class="flex"
-    >
-      <GridBox
-        v-for="(boxType, colIndex) in columns"
-        :key="`col:${rowIndex}:${colIndex}`"
-        :type="boxType"
-      />
-    </div>
+  <div class="flex items-center justify-center">
+    <BoardGameGrid :grid="grid" />
   </div>
 </template>
 
@@ -20,9 +10,13 @@ import { useEvent } from "vue-composable";
 import { useGrid } from "../composables/grid.js";
 import { PIECE_MOVEMENTS } from "../constants/piece.js";
 
-import GridBox from "./GridBox.vue";
+import BoardGameGrid from "./BoardGameGrid.vue";
 
 export default {
+  components: {
+    BoardGameGrid,
+  },
+
   props: {
     grid: {
       type: Array,
@@ -49,10 +43,6 @@ export default {
 
       move(movement);
     });
-  },
-
-  components: {
-    GridBox,
   },
 };
 </script>

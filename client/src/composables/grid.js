@@ -6,6 +6,7 @@ import { PIECE_MOVEMENTS } from "../constants/piece.js";
 export function useGrid() {
   const { appMachineState, appMachineSend } = useAppMachineContext();
 
+  const lobbyName = computed(() => appMachineState.value.context.lobbyName);
   const grid = computed(() => appMachineState.value.context.grid);
   const nextPiece = computed(() => appMachineState.value.context.nextPiece);
 
@@ -22,6 +23,9 @@ export function useGrid() {
   }
 
   return {
+    state: appMachineState,
+
+    lobbyName,
     grid,
     nextPiece,
 

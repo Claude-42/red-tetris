@@ -1,20 +1,20 @@
 <template>
-  <BoardGameGrid :grid="nextPiece" />
+  <BoardGameGrid :grid="grid" />
 </template>
 
 <script>
 import BoardGameGrid from "./BoardGameGrid.vue";
 
 export default {
+  components: {
+    BoardGameGrid,
+  },
+
   props: {
-    nextPiece: {
+    grid: {
       type: Array,
       required: true,
     },
-  },
-
-  components: {
-    BoardGameGrid,
   },
 };
 </script>

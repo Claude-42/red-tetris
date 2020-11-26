@@ -1,16 +1,16 @@
 <i18n lang="yaml">
 en:
-  "game-id": "Game - {id}"
-  "start-game": "Start game"
-  "leave-game": "Leave game"
+  game-id: "Game - {id}"
+  start-game: "Start game"
+  leave-game: "Leave game"
   categories:
     playing: "Playing"
     pending: "Waiting"
 
 fr:
-  "game-id": "Partie - {id}"
-  "start-game": "Lancer le jeu"
-  "leave-game": "Quitter le jeu"
+  game-id: "Partie - {id}"
+  start-game: "Lancer le jeu"
+  leave-game: "Quitter le jeu"
   categories:
     playing: "En jeu"
     pending: "En attente"
@@ -28,20 +28,13 @@ fr:
           </h2>
 
           <div class="flex items-center space-x-4">
-            <button
-              v-if="isOwner"
-              class="px-4 py-2 text-base text-gray-100 bg-blue-300 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400"
-              @click="startGame"
-            >
+            <AppButton v-if="isOwner" @click="startGame">
               {{ t("start-game") }}
-            </button>
+            </AppButton>
 
-            <button
-              class="px-4 py-2 text-base text-white bg-red-500 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600"
-              @click="leaveGame"
-            >
+            <AppButton color="red" @click="leaveGame">
               {{ t("leave-game") }}
-            </button>
+            </AppButton>
           </div>
         </header>
 
@@ -84,6 +77,7 @@ import { useI18n } from "vue-i18n";
 
 import { useAppMachineContext } from "../composables/app";
 
+import AppButton from "../components/AppButton.vue";
 import LoaderIcon from "../components/LoaderIcon.vue";
 import CrownIcon from "../components/CrownIcon.vue";
 
@@ -94,6 +88,7 @@ const CATEGORIES = {
 
 export default {
   components: {
+    AppButton,
     LoaderIcon,
     CrownIcon,
   },

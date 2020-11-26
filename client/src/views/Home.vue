@@ -38,12 +38,9 @@ fr:
       </p>
 
       <div class="flex justify-end w-full">
-        <button
-          type="submit"
-          class="p-2 text-gray-100 bg-blue-300 rounded-full shadow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400"
-        >
+        <AppButton type="submit" rounded>
           <ChevronIcon right />
-        </button>
+        </AppButton>
       </div>
     </form>
   </section>
@@ -54,13 +51,16 @@ import { ref, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
-import ChevronIcon from "../components/ChevronIcon.vue";
 import { useAppMachineContext } from "../composables/app";
+
+import AppButton from "../components/AppButton.vue";
+import ChevronIcon from "../components/ChevronIcon.vue";
 
 export default {
   name: "Home",
 
   components: {
+    AppButton,
     ChevronIcon,
   },
 
