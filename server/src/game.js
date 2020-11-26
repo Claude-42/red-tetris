@@ -20,14 +20,16 @@ class Game {
   }
 
   delUser (id) {
-    const indexPlayer = this.usersList.find(elt => elt.id === id)
+    const indexPlayer = this.usersList.findIndex(elt => elt.id === id)
     if (this.usersList.length === 1) {
       return 'DELETE_ME'
     }
+
     if (this.usersList[indexPlayer].owner === true) {
       this.transferOwnerShip()
     }
-    this.usersList.splice(this.usersList.find(elt => elt.id === id), 1)
+
+    this.usersList.splice(indexPlayer, 1)
     return 'OK'
   }
 
