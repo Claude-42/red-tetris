@@ -39,13 +39,11 @@ class Grid {
   }
 
   popLine () {
-    const rowsToKeep = this.lockGrid.map((row) => {
-      if (row.some(col => col === CASE_COLOR.EMPTY)) {
-        return row
-      }
-
-      return undefined
-    }).filter(Boolean)
+    const rowsToKeep = this.lockGrid.filter(
+      (row) => row.some(
+        col => [CASE_COLOR.EMPTY, CASE_COLOR.BLOCKED].includes(col)
+      )
+    )
     const deletedRowsCount = 20 - rowsToKeep.length
 
     if (deletedRowsCount === 0) {
@@ -178,11 +176,8 @@ class Grid {
 
   makeMeShadow () {
     function invertGridAxis (grid) {
-      const xLength = grid[0]?.length
-      const yLength = grid?.length
-      if (xLength === undefined || yLength === undefined) {
-        throw new Error('Invalid input arrays')
-      }
+      const xLength = grid[0].length
+      const yLength = grid.length
 
       return Array(xLength)
         .fill()
@@ -209,19 +204,27 @@ class Grid {
   }
 
   blockLine (numberBlockedLines) {
-    const blockGrid = Array(numberBlockedLines)
+    const blockedGrid = Array(numberBlockedLines)
       .fill()
       .map(() =>
         Array(10)
           .fill(CASE_COLOR.BLOCKED)
       )
 
-    for (let i = 0; i < numberBlockedLines; i++) {
-      if (this.lockGrid[i].every(elt => elt === CASE_COLOR.EMPTY)) {
-        return 'GAME_OVER'
-      }
+    const addingBlockedLinesWouldMakeUserLooseGame = blockedGrid.some(
+      (_, blockedRowIndex) => this.lockGrid[blockedRowIndex].some(
+        caseColor => caseColor !== CASE_COLOR.EMPTY
+      )
+    )
+    if (addingBlockedLinesWouldMakeUserLooseGame) {
+      return 'GAME_OVER'
     }
-    this.lockGrid = this.lockGrid.concat(blockGrid).slice(numberBlockedLines, 20 + numberBlockedLines)
+
+    this.lockGrid = [
+      ...this.lockGrid.slice(numberBlockedLines),
+      ...blockedGrid
+    ]
+
     return 'OK'
   }
 }

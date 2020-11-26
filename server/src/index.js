@@ -164,26 +164,43 @@ io.on('connection', (socket) => {
       return
     }
 
+    function generateOwnGridPayload (user, game) {
+      return {
+        PAINT_GRID: user.grid.simulatePieceInGrid(),
+        NEXT_PIECE: game.masterpiece.sendNextPiece(user.grid.currentPiece + 1)
+      }
+    }
+
+    function blockGridLinesToAllPlayersExceptSender (linesCountToBlock) {
+      for (const user of tmpGame.usersList) {
+        if (user.name === tmpPlayer.name) {
+          continue
+        }
+
+        const gameOver = user.grid.blockLine(linesCountToBlock)
+
+        io.to(user.id).emit('OWN_GRID', generateOwnGridPayload(user, tmpGame))
+
+        if (gameOver === 'GAME_OVER') {
+          io.to(user.id).emit('GAME_OVER')
+        }
+      }
+    }
+
     if ((tmpPlayer.grid.handleMove(type).status === 'ERROR' && TMP_DOWN === 1) || type === 'FALL') {
       tmpPlayer.grid.putPieceInGrid()
-      const popLineNumber = tmpPlayer.grid.popLine() - 1
-      if (popLineNumber > 0) {
-        tmpGame.usersList.forEach(elt => {
-          if (elt.name !== tmpPlayer.name) {
-            const gameOver = elt.grid.blockLine()
-            io.to(elt.id).emit('OWN_GRID', { PAINT_GRID: elt.grid.simulatePieceInGrid(), NEXT_PIECE: tmpGame.masterpiece.sendNextPiece(elt.grid.currentPiece + 1) })
-            if (gameOver === 'GAME_OVER') {
-              io.to(elt.id).emit('GAME_OVER')
-            }
-          }
-        })
+
+      const linesCountToBlock = tmpPlayer.grid.popLine() - 1
+      if (linesCountToBlock > 0) {
+        blockGridLinesToAllPlayersExceptSender(linesCountToBlock)
       }
+
       if (tmpPlayer.grid.nextPiece()) {
         isGameOver = true
       }
     }
 
-    socket.emit('OWN_GRID', { PAINT_GRID: tmpPlayer.grid.simulatePieceInGrid(), NEXT_PIECE: tmpGame.masterpiece.sendNextPiece(tmpPlayer.grid.currentPiece + 1) })
+    socket.emit('OWN_GRID', generateOwnGridPayload(tmpPlayer, tmpGame))
 
     if (isGameOver) {
       socket.emit('GAME_OVER')
