@@ -37,7 +37,9 @@ fr:
         <BoardGameSection>
           <template #title> Score </template>
 
-          <p class="pb-4 text-4xl font-bold">4000</p>
+          <p class="pb-4 text-4xl font-bold">
+            {{ score }}
+          </p>
         </BoardGameSection>
 
         <BoardGameSection>
@@ -85,6 +87,7 @@ export default {
       grid,
       playersShadows,
       nextPiece,
+      score,
       startGame,
     } = useGrid();
 
@@ -95,8 +98,9 @@ export default {
       lobbyName,
       grid,
       nextPiece,
-      startGame,
+      score,
       playersShadows,
+      startGame,
     };
   },
 };

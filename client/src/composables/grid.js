@@ -12,6 +12,7 @@ export function useGrid() {
   const playersShadows = computed(
     () => appMachineState.value.context.lobbyPlayersShadows
   );
+  const score = computed(() => appMachineState.value.context.score);
 
   function move(movement) {
     if (!Reflect.has(PIECE_MOVEMENTS, movement)) {
@@ -32,6 +33,7 @@ export function useGrid() {
     grid,
     nextPiece,
     playersShadows,
+    score,
 
     move,
     startGame,
