@@ -11,6 +11,7 @@ export const appMachine = Machine(
     context: {
       username: undefined,
       isOwner: undefined,
+      score: 0,
 
       availableLobbies: undefined,
 
@@ -204,6 +205,9 @@ export const appMachine = Machine(
           SET_LOBBY_PLAYERS_SHADOWS: {
             actions: "setLobbyPlayersShadows",
           },
+          SET_SCORE: {
+            actions: "setScore",
+          },
         },
       },
     },
@@ -271,6 +275,15 @@ export const appMachine = Machine(
           callback({
             type: "UPDATE_GRID_DATA",
             payload,
+          });
+        });
+
+        socket.on("UPDATE_SCORE", ({ score }) => {
+          callback({
+            type: "SET_SCORE",
+            data: {
+              score,
+            },
           });
         });
 
@@ -400,6 +413,9 @@ export const appMachine = Machine(
       setGridData: assign({
         grid: (_context, { payload: { PAINT_GRID } }) => PAINT_GRID,
         nextPiece: (_context, { payload: { NEXT_PIECE } }) => NEXT_PIECE,
+      }),
+      setScore: assign({
+        score: (_context, { data: { score } }) => score,
       }),
       setLobbyPlayersShadows: assign({
         lobbyPlayersShadows: ({ username }, { data: { players } }) =>
