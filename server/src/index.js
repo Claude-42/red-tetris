@@ -105,7 +105,7 @@ io.on('connection', (socket) => {
 
   socket.on('QUIT_LOBBY', (lobbyName) => {
     if (gamesList.find(elt => elt.name === lobbyName).delUser(socket.id) === 'DELETE_ME') {
-      gamesList.splice(gamesList.find(elt => elt.name === lobbyName), 1)
+      gamesList.splice(gamesList.findIndex(elt => elt.name === lobbyName), 1)
     }
   })
   // ----------------------------------------------------------------------
@@ -114,9 +114,9 @@ io.on('connection', (socket) => {
     gamesList.forEach(elt => {
       elt.usersList.forEach(player => {
         if (player.id === socket.id) {
-          uniqueUser.splice(uniqueUser.find(user => user === player.name), 1)
+          uniqueUser.splice(uniqueUser.findIndex(user => user === player.name), 1)
           if (elt.delUser(socket.id) === 'DELETE_ME') {
-            gamesList.splice(gamesList.find(elem => elem.name === elt.name), 1)
+            gamesList.splice(gamesList.findIndex(elem => elem.name === elt.name), 1)
           }
         }
       })
