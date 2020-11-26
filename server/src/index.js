@@ -105,9 +105,25 @@ io.on('connection', (socket) => {
 
   socket.on('QUIT_LOBBY', (lobbyName) => {
     if (gamesList.find(elt => elt.name === lobbyName).delUser(socket.id) === 'DELETE_ME') {
-      gamesList.splice(this.usersList.find(elt => elt.name === lobbyName), 1)
+      gamesList.splice(gamesList.find(elt => elt.name === lobbyName), 1)
     }
   })
+  // ----------------------------------------------------------------------
+
+  socket.on('disconnecting', () => {
+    gamesList.forEach(elt => {
+      elt.usersList.forEach(player => {
+        if (player.id === socket.id) {
+          uniqueUser.splice(uniqueUser.find(user => user === player.name), 1)
+          if (elt.delUser(socket.id) === 'DELETE_ME') {
+            gamesList.splice(gamesList.find(elem => elem.name === elt.name), 1)
+          }
+        }
+      })
+    })
+  })
+
+  // ----------------------------------------------------------------------
 
   socket.on('GET_ALL_LOBBIES', () => {
     io.to(socket.id).emit('GET_ALL_LOBBIES', getAllLobies())
