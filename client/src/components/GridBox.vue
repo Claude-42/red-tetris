@@ -1,5 +1,5 @@
 <template>
-  <div :class="[classes, 'w-6 h-6 border border-gray-300']" />
+  <div :class="[colorClasses, sizeClasses, 'border border-gray-300']" />
 </template>
 
 <script>
@@ -16,12 +16,14 @@ export default {
         return CASE_COLOR_MAP.has(value);
       },
     },
+
+    small: Boolean,
   },
 
   setup(props) {
     const color = computed(() => CASE_COLOR_MAP.get(props.type));
 
-    const classes = computed(() => {
+    const colorClasses = computed(() => {
       const CLASSES = new Map([
         [CASE_COLOR.RED, "bg-red-400"],
         [CASE_COLOR.BLUE, "bg-blue-700"],
@@ -38,8 +40,17 @@ export default {
       return CLASSES.get(color.value);
     });
 
+    const sizeClasses = computed(() => {
+      if (props.small) {
+        return "w-2 h-2";
+      }
+
+      return "w-6 h-6";
+    });
+
     return {
-      classes,
+      colorClasses,
+      sizeClasses,
     };
   },
 };

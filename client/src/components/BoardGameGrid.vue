@@ -9,6 +9,7 @@
         v-for="(boxType, colIndex) in columns"
         :key="`col:${rowIndex}:${colIndex}`"
         :type="boxType"
+        :small="small"
       />
     </div>
   </div>
@@ -23,6 +24,8 @@ export default {
       type: Array,
       required: true,
     },
+
+    small: Boolean,
   },
 
   components: {
