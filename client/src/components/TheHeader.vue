@@ -2,13 +2,16 @@
   <header
     class="flex items-center justify-between px-8 py-3 mb-2 bg-white shadow align-center"
   >
-    <h1 class="text-3xl font-bold text-center">Tetris</h1>
+    <h1 class="flex text-3xl font-bold">
+      <span class="text-red-500">Red</span>
+      Tetris
+    </h1>
 
     <div>
       <span ref="dropDownRef" class="relative">
         <button
           type="button"
-          class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600"
           id="mobile-menu"
           aria-haspopup="true"
           :aria-expanded="openLanguagesDropDown"
