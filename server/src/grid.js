@@ -190,6 +190,23 @@ class Grid {
       })
     })
   }
+
+  blockLine (numberBlockedLines) {
+    const blockGrid = Array(numberBlockedLines)
+      .fill()
+      .map(() =>
+        Array(10)
+          .fill(CASE_COLOR.BLOCKED)
+      )
+
+    for (let i = 0; i < numberBlockedLines; i++) {
+      if (this.lockGrid[i].every(elt => elt === CASE_COLOR.EMPTY)) {
+        return 'GAME_OVER'
+      }
+    }
+    this.lockGrid = this.lockGrid.concat(blockGrid).slice(numberBlockedLines, 20 + numberBlockedLines)
+    return 'OK'
+  }
 }
 
 module.exports = { Grid, MOVE, CASE_COLOR }

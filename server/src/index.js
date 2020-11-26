@@ -143,7 +143,18 @@ io.on('connection', (socket) => {
 
     if ((tmpPlayer.grid.handleMove(type).status === 'ERROR' && TMP_DOWN === 1) || type === 'FALL') {
       tmpPlayer.grid.putPieceInGrid()
-      tmpPlayer.grid.popLine()
+      const popLineNumber = tmpPlayer.grid.popLine() - 1
+      if (popLineNumber > 0) {
+        tmpGame.usersList.forEach(elt => {
+          if (elt.name !== tmpPlayer.name) {
+            const gameOver = elt.grid.blockLine()
+            io.to(elt.id).emit('OWN_GRID', { PAINT_GRID: elt.grid.simulatePieceInGrid(), NEXT_PIECE: tmpGame.masterpiece.sendNextPiece(elt.grid.currentPiece + 1) })
+            if (gameOver === 'GAME_OVER') {
+              io.to(elt.id).emit('GAME_OVER')
+            }
+          }
+        })
+      }
       if (tmpPlayer.grid.nextPiece()) {
         isGameOver = true
       }
@@ -159,9 +170,9 @@ io.on('connection', (socket) => {
       if (elt.name === tmpPlayer.name) {
         return undefined
       }
-      return elt.makeMeShadow()
+      return { name: elt.name, grid: elt.grid.makeMeShadow() }
     }).filter(Boolean)
 
-    io.to(tmpGame.name).emit('NEW_SHADOW', shadowGridList)
+    socket.broadcast.to(tmpGame.name).emit('NEW_SHADOW', shadowGridList)
   })
 })
