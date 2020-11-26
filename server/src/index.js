@@ -201,6 +201,9 @@ io.on('connection', (socket) => {
     }
 
     socket.emit('OWN_GRID', generateOwnGridPayload(tmpPlayer, tmpGame))
+    socket.emit('UPDATE_SCORE', {
+      score: tmpPlayer.grid.score
+    })
 
     if (isGameOver) {
       socket.emit('GAME_OVER')
