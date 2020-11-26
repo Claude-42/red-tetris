@@ -49,7 +49,7 @@ fr:
         <BoardGameSection>
           <template #title> Les autres joueurs </template>
 
-          <TheBoardGameShadowList :players="players" />
+          <TheBoardGameShadowList :players="playersShadows" />
         </BoardGameSection>
       </div>
     </div>
@@ -79,50 +79,14 @@ export default {
   setup() {
     const { t } = useI18n();
 
-    const { state, lobbyName, grid, nextPiece, startGame } = useGrid();
-
-    const players = [
-      {
-        playerName: "Francis",
-        grid: [
-          [0, 0, 0],
-          [0, 1, 0],
-          [0, 1, 1],
-        ],
-      },
-      {
-        playerName: "Francis",
-        grid: [
-          [0, 0, 0],
-          [0, 1, 0],
-          [0, 1, 1],
-        ],
-      },
-      {
-        playerName: "Francis",
-        grid: [
-          [0, 0, 0],
-          [0, 1, 0],
-          [0, 1, 1],
-        ],
-      },
-      {
-        playerName: "Francis",
-        grid: [
-          [0, 0, 0],
-          [0, 1, 0],
-          [0, 1, 1],
-        ],
-      },
-      {
-        playerName: "Francis",
-        grid: [
-          [0, 0, 0],
-          [0, 1, 0],
-          [0, 1, 1],
-        ],
-      },
-    ];
+    const {
+      state,
+      lobbyName,
+      grid,
+      playersShadows,
+      nextPiece,
+      startGame,
+    } = useGrid();
 
     return {
       t,
@@ -132,7 +96,7 @@ export default {
       grid,
       nextPiece,
       startGame,
-      players,
+      playersShadows,
     };
   },
 };

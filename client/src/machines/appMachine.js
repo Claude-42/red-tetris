@@ -17,6 +17,7 @@ export const appMachine = Machine(
       lobbyName: undefined,
       lobbyStatus: undefined,
       lobbyPlayersList: undefined,
+      lobbyPlayersShadows: undefined,
 
       grid: undefined,
       nextPiece: undefined,
@@ -94,6 +95,10 @@ export const appMachine = Machine(
           SET_LOBBY_PLAYERS: {
             actions: "setLobbyPlayers",
           },
+          UPDATE_GRID_DATA: {
+            target: "readyToPlay",
+            actions: "setGridData",
+          },
         },
       },
       waitingToStartLobby: {
@@ -114,6 +119,9 @@ export const appMachine = Machine(
       readyToPlay: {
         on: {
           START_GAME: "playing",
+          UPDATE_GRID_DATA: {
+            actions: "setGridData",
+          },
         },
       },
       playing: {
@@ -193,6 +201,9 @@ export const appMachine = Machine(
           SET_LOBBY_PLAYERS: {
             actions: "setLobbyPlayers",
           },
+          SET_LOBBY_PLAYERS_SHADOWS: {
+            actions: "setLobbyPlayersShadows",
+          },
         },
       },
     },
@@ -260,6 +271,15 @@ export const appMachine = Machine(
           callback({
             type: "UPDATE_GRID_DATA",
             payload,
+          });
+        });
+
+        socket.on("NEW_SHADOW", (players) => {
+          callback({
+            type: "SET_LOBBY_PLAYERS_SHADOWS",
+            data: {
+              players,
+            },
           });
         });
 
@@ -380,6 +400,10 @@ export const appMachine = Machine(
       setGridData: assign({
         grid: (_context, { payload: { PAINT_GRID } }) => PAINT_GRID,
         nextPiece: (_context, { payload: { NEXT_PIECE } }) => NEXT_PIECE,
+      }),
+      setLobbyPlayersShadows: assign({
+        lobbyPlayersShadows: ({ username }, { data: { players } }) =>
+          players.filter(({ name }) => name !== username),
       }),
     },
   }
