@@ -2,8 +2,8 @@ const express = require('express')
 const app = express()
 const SocketIO = require('socket.io')
 const cors = require('cors')
-const { MasterPiece } = require('./masterpiece')
-const { Grid } = require('./grid')
+// const { MasterPiece } = require('./masterpiece')
+// const { Grid } = require('./grid')
 const { Game } = require('./game')
 
 const PORT = 3030
@@ -22,8 +22,8 @@ const server = app.listen(PORT, () => {
 
 const io = SocketIO(server)
 
-const masterpiece = new MasterPiece()
-const grid = new Grid(masterpiece)
+// const masterpiece = new MasterPiece()
+// const grid = new Grid(masterpiece)
 const gamesList = []
 const uniqueUser = []
 
@@ -36,7 +36,7 @@ function newGame (playerName, playerId, lobbyName) {
 
   for (const elt of gamesList) {
     if (elt.name === lobbyName) {
-      if (elt.usersList.length > 5) {
+      if (elt.usersList.length > 3) {
         return {
           status: 'FULL'
         }
@@ -100,6 +100,18 @@ io.on('connection', (socket) => {
         PAINT_GRID: player.grid.simulatePieceInGrid(),
         NEXT_PIECE: game.masterpiece.sendNextPiece(player.grid.currentPiece + 1)
       })
+
+      const shadowGridsList = game.usersList.map(user => ({
+        name: user.name,
+        grid: user.grid.makeMeShadow()
+      }))
+      io.to(player.id).emit('NEW_SHADOW', shadowGridsList.map(elt => {
+        if (elt.name !== player.name) {
+          return elt
+        } else {
+          return undefined
+        }
+      }).filter(Boolean))
     })
   })
 
