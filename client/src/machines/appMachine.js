@@ -34,6 +34,7 @@ export const appMachine = Machine(
           SOCKET_CONNECTED: "usernameSelection",
         },
       },
+
       usernameSelection: {
         initial: "idle",
         states: {
@@ -49,15 +50,17 @@ export const appMachine = Machine(
             target: "waitingToJoinLobby",
           },
           SELECTION_FAIL: {
-            target: "usernameSelection.failure",
+            target: ".failure",
           },
         },
       },
+
       waitingToJoinLobby: {
         entry: "getAllLobbies",
 
         on: {
           JOIN_LOBBY: {
+            target: "joiningLobby",
             actions: [
               assign({
                 lobbyName: (_context, { data: lobbyName }) => lobbyName,
@@ -65,7 +68,11 @@ export const appMachine = Machine(
               "sendJoinLobbyToWebsocket",
             ],
           },
+        },
+      },
 
+      joiningLobby: {
+        on: {
           GAME_ALREADY_STARTED: {
             actions: assign({
               lobbyStatus: "ALREADY_STARTED",
@@ -88,6 +95,7 @@ export const appMachine = Machine(
           },
         },
       },
+
       waitingToStartLobbyLoading: {
         after: {
           1000: "waitingToStartLobby",
@@ -102,6 +110,7 @@ export const appMachine = Machine(
           },
         },
       },
+
       waitingToStartLobby: {
         on: {
           START_GAME: {
@@ -117,6 +126,7 @@ export const appMachine = Machine(
           },
         },
       },
+
       readyToPlay: {
         on: {
           START_GAME: "playing",
@@ -125,6 +135,7 @@ export const appMachine = Machine(
           },
         },
       },
+
       playing: {
         initial: "playing",
         states: {
@@ -179,9 +190,7 @@ export const appMachine = Machine(
                   },
                   inc: {
                     entry: "sendAutomaticDownToWebsocket",
-                    on: {
-                      "": "idle",
-                    },
+                    always: "idle",
                   },
                 },
               },

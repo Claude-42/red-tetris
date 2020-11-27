@@ -28,7 +28,7 @@ fr:
       <ul v-if="games.length > 0" class="divide-y divide-opacity-5">
         <li v-for="game in games" :key="game">
           <router-link
-            :to="`/game/${encodeURIComponent(game)}`"
+            :to="formatGamePath(game)"
             class="flex items-center justify-between px-4 py-4 focus:outline-none focus:ring-2 ring-inset focus:ring-blue-400"
           >
             <span>{{ game }}</span>
@@ -49,10 +49,9 @@ fr:
 </template>
 
 <script>
-import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 
-import { useAppMachineContext } from "../composables/app";
+import { useGame } from "../composables/game.js";
 
 import AppButton from "../components/AppButton.vue";
 import ChevronIcon from "../components/ChevronIcon.vue";
@@ -66,16 +65,13 @@ export default {
   setup() {
     const { t } = useI18n();
 
-    const { appMachineState } = useAppMachineContext();
-
-    const games = computed(
-      () => appMachineState.value.context.availableLobbies ?? []
-    );
+    const { games, formatGamePath } = useGame();
 
     return {
       t,
 
       games,
+      formatGamePath,
     };
   },
 };

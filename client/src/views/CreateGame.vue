@@ -41,6 +41,8 @@ fr:
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
+import { useGame } from "../composables/game.js";
+
 import AppButton from "../components/AppButton.vue";
 import ChevronIcon from "../components/ChevronIcon.vue";
 
@@ -52,8 +54,9 @@ export default {
 
   setup() {
     const { t } = useI18n();
-
     const router = useRouter();
+
+    const { formatGamePath } = useGame();
 
     function createGame({ target: form }) {
       const data = new FormData(form);
@@ -64,7 +67,7 @@ export default {
 
       console.log("lobbyName", lobbyName);
 
-      router.push(`/game/${encodeURI(lobbyName)}`);
+      router.push(formatGamePath(lobbyName));
     }
 
     return {

@@ -47,9 +47,9 @@ fr:
 </template>
 
 <script>
-import { ref, watchEffect } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 import { useAppMachineContext } from "../composables/app";
 
@@ -67,8 +67,13 @@ export default {
   setup() {
     const { t } = useI18n();
     const router = useRouter();
+    const route = useRoute();
 
-    const usernameInvalidRef = ref(false);
+    const invalidUsernameSearchParam = computed(
+      () => route.query.invalid === "true"
+    );
+
+    const usernameInvalidRef = ref(invalidUsernameSearchParam.value);
 
     const { appMachineState, appMachineSend } = useAppMachineContext();
 

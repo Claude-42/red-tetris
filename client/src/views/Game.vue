@@ -71,7 +71,7 @@ fr:
 </template>
 
 <script>
-import { computed, onMounted, watch, watchEffect } from "vue";
+import { computed, watch, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 
@@ -98,15 +98,49 @@ export default {
 
     const router = useRouter();
     const route = useRoute();
-    const lobbyName = computed(() => route.params.id);
+    const lobbyName = computed(() => route.params.lobbyName);
+    const playerName = computed(() => route.params.playerName);
 
     const { appMachineState, appMachineSend } = useAppMachineContext();
 
-    onMounted(() => {
-      appMachineSend({
-        type: "JOIN_LOBBY",
-        data: lobbyName.value,
-      });
+    watchEffect(() => {
+      // The username is invalid
+      if (appMachineState.value.matches("usernameSelection.failure")) {
+        // Replace route with Home view
+        // to ask a new username.
+        router.replace({
+          path: "/",
+          query: {
+            invalid: true,
+          },
+        });
+
+        return;
+      }
+
+      if (appMachineState.value.matches("usernameSelection")) {
+        appMachineSend({
+          type: "SET_USERNAME",
+          data: playerName.value,
+        });
+
+        return;
+      }
+
+      if (appMachineState.value.matches("waitingToJoinLobby")) {
+        appMachineSend({
+          type: "JOIN_LOBBY",
+          data: lobbyName.value,
+        });
+
+        return;
+      }
+
+      if (appMachineState.value.matches("readyToPlay")) {
+        router.push("/board-game");
+
+        return;
+      }
     });
 
     const players = computed(
@@ -140,12 +174,6 @@ export default {
       router.replace("/game-full");
     });
 
-    watchEffect(() => {
-      if (appMachineState.value.matches("readyToPlay")) {
-        router.push("/board-game");
-      }
-    });
-
     function startGame() {
       if (isOwner.value !== true) {
         return;
@@ -162,6 +190,7 @@ export default {
       t,
 
       lobbyName,
+      playerName,
       playersByCategories,
       isOwner,
 
