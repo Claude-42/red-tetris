@@ -14,6 +14,10 @@ export function useGrid() {
   );
   const score = computed(() => appMachineState.value.context.score);
 
+  const isGameOver = computed(() =>
+    appMachineState.value.matches("playing.gameOver")
+  );
+
   function move(movement) {
     if (!Reflect.has(PIECE_MOVEMENTS, movement)) {
       throw new Error("invalid movement");
@@ -30,6 +34,7 @@ export function useGrid() {
     nextPiece,
     playersShadows,
     score,
+    isGameOver,
 
     move,
   };

@@ -29,6 +29,7 @@ fr:
     <div class="flex flex-wrap md:divide-x">
       <TheBoardGameGrid
         :grid="grid"
+        :is-game-over="isGameOver"
         class="w-full py-4 border-gray-300 md:w-3/5"
       />
 
@@ -95,6 +96,7 @@ export default {
       playersShadows,
       nextPiece,
       score,
+      isGameOver,
     } = useGrid();
 
     return {
@@ -106,6 +108,8 @@ export default {
       nextPiece,
       score,
       playersShadows,
+      isGameOver,
+
       startGame,
       leaveGame,
     };
