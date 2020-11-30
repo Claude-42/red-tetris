@@ -109,11 +109,8 @@ export default {
     watch(
       appMachineState,
       () => {
-        console.log("watch effect", appMachineState.value.value);
-
         // The username is invalid
         if (appMachineState.value.matches("usernameSelection.failure")) {
-          console.log("reached usernameSelection.failure");
           // Replace route with Home view
           // to ask a new username.
           router.replace({
@@ -126,10 +123,9 @@ export default {
           return;
         }
 
-        if (appMachineState.value.matches("usernameSelection")) {
-          console.log("reached usernameSelection");
+        if (appMachineState.value.matches("usernameSelection.idle")) {
           appMachineSend({
-            type: "SET_USERNAME",
+            type: "SET_USERNAME_BYPASS_LOBBIES",
             data: playerName.value,
           });
 
@@ -137,8 +133,6 @@ export default {
         }
 
         if (appMachineState.value.matches("choosingLobby")) {
-          // FIXME: reach there after quiting the game
-          console.log("reached choosingLobby");
           appMachineSend({
             type: "SELECT_LOBBY",
             data: lobbyName.value,
@@ -148,8 +142,6 @@ export default {
         }
 
         if (appMachineState.value.matches("waitingToJoinLobby")) {
-          console.log("reached lobby");
-
           appMachineSend("JOIN_LOBBY");
 
           return;

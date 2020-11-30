@@ -9,6 +9,8 @@ export const appMachine = Machine(
   {
     id: "app",
     context: {
+      bypassLobbiesFetchingAfterUsernameFilling: undefined,
+
       username: undefined,
       isOwner: undefined,
       score: 0,
@@ -39,18 +41,39 @@ export const appMachine = Machine(
         initial: "idle",
         states: {
           idle: {},
+          loading: {
+            entry: "sendNewUserToWebsocket",
+            on: {
+              SET_USERNAME: undefined,
+
+              SELECTION_SUCCESS: [
+                {
+                  cond: ({ bypassLobbiesFetchingAfterUsernameFilling }) =>
+                    bypassLobbiesFetchingAfterUsernameFilling === true,
+                  target: "#app.choosingLobby",
+                },
+                {
+                  target: "#app.loadingLobbies",
+                },
+              ],
+              SELECTION_FAIL: {
+                target: "failure",
+              },
+            },
+          },
           failure: {},
         },
         on: {
           SET_USERNAME: {
-            actions: ["setUsername", "sendNewUserToWebsocket"],
+            target: ".loading",
+            actions: "setUsername",
           },
-
-          SELECTION_SUCCESS: {
-            target: "loadingLobbies",
-          },
-          SELECTION_FAIL: {
-            target: ".failure",
+          SET_USERNAME_BYPASS_LOBBIES: {
+            target: ".loading",
+            actions: [
+              "setUsername",
+              "toggleBypassLobbiesFetchingAfterUsernameFilling",
+            ],
           },
         },
       },
@@ -75,13 +98,7 @@ export const appMachine = Machine(
         on: {
           SELECT_LOBBY: {
             target: "waitingToJoinLobby",
-            actions: assign({
-              lobbyName: (_context, { data: lobbyName }) => {
-                console.log("set lobby name from choosingLobby state");
-
-                return lobbyName;
-              },
-            }),
+            actions: "setLobbyName",
           },
         },
       },
@@ -416,6 +433,9 @@ export const appMachine = Machine(
       },
     },
     actions: {
+      toggleBypassLobbiesFetchingAfterUsernameFilling: assign({
+        bypassLobbiesFetchingAfterUsernameFilling: true,
+      }),
       sendStartGameToWebsocket: send(
         ({ lobbyName }) => ({
           type: "START_GAME",
@@ -431,6 +451,9 @@ export const appMachine = Machine(
       }),
       setUsername: assign({
         username: (_context, { data: username }) => username,
+      }),
+      setLobbyName: assign({
+        lobbyName: (_context, { data: lobbyName }) => lobbyName,
       }),
       getAllLobbies: send("GET_ALL_LOBBIES", {
         to: "websocket",

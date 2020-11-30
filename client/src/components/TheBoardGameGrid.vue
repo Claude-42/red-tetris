@@ -60,12 +60,17 @@ export default {
       move(movement);
     });
 
-    // Unwatch keydown events when the game is lost
-    watch(props.isGameOver, (isGameOver) => {
-      if (isGameOver) {
-        remove();
+    // Unwatch keydown events when the game is lost.
+    // Actually this is a useless optimization but it's great
+    // to know we can do that.
+    watch(
+      () => props.isGameOver,
+      (isGameOver) => {
+        if (isGameOver) {
+          remove();
+        }
       }
-    });
+    );
   },
 };
 </script>

@@ -82,7 +82,7 @@ import AppButton from "./AppButton.vue";
 import BoardGameSection from "./BoardGameSection.vue";
 import TheBoardGameGrid from "./TheBoardGameGrid.vue";
 import TheBoardGameNextPieceGrid from "./TheBoardGameNextPieceGrid.vue";
-import TheBoardGameShadowList from "./TheBoardGameShadowList";
+import TheBoardGameShadowList from "./TheBoardGameShadowList.vue";
 
 import { useGrid } from "../composables/grid.js";
 import { useGame } from "../composables/game";

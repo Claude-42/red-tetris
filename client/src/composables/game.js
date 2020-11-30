@@ -58,8 +58,6 @@ export function useGame() {
   }
 
   watchEffect(() => {
-    console.log("current path", route.path);
-
     const GAMES_LIST_PATH = "/games";
 
     if (route.path === GAMES_LIST_PATH) {
