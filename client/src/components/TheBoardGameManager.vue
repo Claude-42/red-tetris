@@ -1,9 +1,15 @@
 <i18n lang="yaml">
 en:
   leave-game: "Leave game"
+  score-title: "Score"
+  next-piece-title: "Next piece"
+  other-players-title: "Other players"
 
 fr:
   leave-game: "Quitter le jeu"
+  score-title: "Score"
+  next-piece-title: "Prochaine pièce"
+  other-players-title: "Les autres joueurs"
 </i18n>
 
 <template>
@@ -40,7 +46,9 @@ fr:
         }"
       >
         <BoardGameSection>
-          <template #title> Score </template>
+          <template #title>
+            {{ t("score-title") }}
+          </template>
 
           <p class="pb-4 text-4xl font-bold">
             {{ score }}
@@ -48,13 +56,17 @@ fr:
         </BoardGameSection>
 
         <BoardGameSection>
-          <template #title> Prochaine pièce </template>
+          <template #title>
+            {{ t("next-piece-title") }}
+          </template>
 
           <TheBoardGameNextPieceGrid :next-piece="nextPiece" />
         </BoardGameSection>
 
         <BoardGameSection>
-          <template #title> Les autres joueurs </template>
+          <template #title>
+            {{ t("other-players-title") }}
+          </template>
 
           <TheBoardGameShadowList :players="playersShadows" />
         </BoardGameSection>
