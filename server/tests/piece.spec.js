@@ -916,4 +916,10 @@ describe('The Piece class', () => {
       })
     })
   })
+  describe('toString method', () => {
+    test('toArray red', () => {
+      const piece = new Piece(PIECE_TYPE.RED)
+      expect(piece.toString()).toStrictEqual('1,1,0\n0,1,1\n0,0,0')
+    })
+  })
 })

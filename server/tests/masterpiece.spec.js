@@ -85,5 +85,66 @@ describe('The MasterPiece class', () => {
     test('piece 7', () => {
       expect(masterPiece.nextPiece(6)).not.toEqual(undefined)
     })
+    test('newSet is called', () => {
+      const newSetFn = jest.fn()
+      masterPiece.newSet = newSetFn
+
+      masterPiece.nextPiece(8)
+
+      expect(newSetFn).toHaveBeenCalledTimes(1)
+    })
+  })
+  describe('sendNextPiece method', () => {
+    const masterPiece = new MasterPiece()
+    masterPiece.pieces = ['RED', 'BLUE', 'TURQUOISE', 'ORANGE', 'GREEN', 'PURPLE', 'YELLOW']
+    test('piece 0', () => {
+      expect(masterPiece.sendNextPiece(0)).toEqual([
+        [2, 2, 0],
+        [0, 2, 2],
+        [0, 0, 0]
+      ])
+    })
+    test('piece 1', () => {
+      expect(masterPiece.sendNextPiece(1)).toEqual([
+        [3, 0, 0],
+        [3, 3, 3],
+        [0, 0, 0]
+      ])
+    })
+    test('piece 2', () => {
+      expect(masterPiece.sendNextPiece(2)).toEqual([
+        [0, 0, 0, 0],
+        [4, 4, 4, 4],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+      ])
+    })
+    test('piece 3', () => {
+      expect(masterPiece.sendNextPiece(3)).toEqual([
+        [0, 0, 5],
+        [5, 5, 5],
+        [0, 0, 0]
+      ])
+    })
+    test('piece 4', () => {
+      expect(masterPiece.sendNextPiece(4)).toEqual([
+        [0, 6, 6],
+        [6, 6, 0],
+        [0, 0, 0]
+      ])
+    })
+    test('piece 5', () => {
+      expect(masterPiece.sendNextPiece(5)).toEqual([
+        [0, 7, 0],
+        [7, 7, 7],
+        [0, 0, 0]
+      ])
+    })
+    test('piece 6', () => {
+      expect(masterPiece.sendNextPiece(6)).toEqual([
+        [8, 8],
+        [8, 8]
+      ])
+    })
   })
 })
