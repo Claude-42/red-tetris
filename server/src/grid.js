@@ -141,8 +141,6 @@ class Grid {
         }
         break
       }
-      default:
-        throw new Error('Received unknown move')
     }
   }
 
@@ -164,8 +162,6 @@ class Grid {
       case MOVE.ROTATE:
         tmpPiece.applyRotationAndRecalibrate()
         break
-      default:
-        throw new Error('Received unknown move')
     }
 
     return !(
