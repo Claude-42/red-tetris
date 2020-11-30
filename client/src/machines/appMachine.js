@@ -47,7 +47,7 @@ export const appMachine = Machine(
           },
 
           SELECTION_SUCCESS: {
-            target: "waitingToJoinLobby",
+            target: "loadingLobbies",
           },
           SELECTION_FAIL: {
             target: ".failure",
@@ -55,18 +55,42 @@ export const appMachine = Machine(
         },
       },
 
-      waitingToJoinLobby: {
-        entry: "getAllLobbies",
+      loadingLobbies: {
+        initial: "firstGame",
+        states: {
+          firstGame: {},
+          newGame: {
+            entry: "resetGameContext",
+          },
+        },
+        on: {
+          LOAD_LOBBIES: {
+            target: "choosingLobby",
+            actions: "getAllLobbies",
+          },
+        },
+      },
 
+      choosingLobby: {
+        on: {
+          SELECT_LOBBY: {
+            target: "waitingToJoinLobby",
+            actions: assign({
+              lobbyName: (_context, { data: lobbyName }) => {
+                console.log("set lobby name from choosingLobby state");
+
+                return lobbyName;
+              },
+            }),
+          },
+        },
+      },
+
+      waitingToJoinLobby: {
         on: {
           JOIN_LOBBY: {
             target: "joiningLobby",
-            actions: [
-              assign({
-                lobbyName: (_context, { data: lobbyName }) => lobbyName,
-              }),
-              "sendJoinLobbyToWebsocket",
-            ],
+            actions: "sendJoinLobbyToWebsocket",
           },
         },
       },
@@ -118,6 +142,10 @@ export const appMachine = Machine(
           },
           SET_LOBBY_PLAYERS: {
             actions: "setLobbyPlayers",
+          },
+          QUIT_LOBBY: {
+            target: "loadingLobbies.newGame",
+            actions: "sendQuitLobbyToWebsocket",
           },
 
           UPDATE_GRID_DATA: {
@@ -201,11 +229,24 @@ export const appMachine = Machine(
               },
 
               GAME_OVER: {
-                target: "end",
+                target: "gameOver",
               },
             },
           },
-          end: {},
+          gameOver: {
+            on: {
+              QUIT_LOBBY: {
+                target: "#app.loadingLobbies.newGame",
+                actions: "sendQuitLobbyToWebsocket",
+              },
+            },
+          },
+          end: {
+            type: "final",
+          },
+        },
+        onDone: {
+          target: "waitingToStartLobby",
         },
         on: {
           SET_LOBBY_PLAYERS: {
@@ -360,6 +401,12 @@ export const appMachine = Machine(
             case "MOVE.FALL":
               socket.emit("MOVE", { type: "FALL" });
               break;
+            case "QUIT_LOBBY": {
+              const { lobbyName } = event.data;
+
+              socket.emit("QUIT_LOBBY", lobbyName);
+              break;
+            }
           }
         });
 
@@ -429,6 +476,58 @@ export const appMachine = Machine(
       setLobbyPlayersShadows: assign({
         lobbyPlayersShadows: ({ username }, { data: { players } }) =>
           players.filter(({ name }) => name !== username),
+      }),
+      sendQuitLobbyToWebsocket: send(
+        (context) => {
+          const {
+            oldGameContext: { lobbyName },
+          } = context;
+
+          return {
+            type: "QUIT_LOBBY",
+            data: { lobbyName },
+          };
+        },
+        {
+          to: "websocket",
+        }
+      ),
+      resetGameContext: assign({
+        isOwner: undefined,
+        score: 0,
+
+        lobbyName: undefined,
+        lobbyStatus: undefined,
+        lobbyPlayersList: undefined,
+        lobbyPlayersShadows: undefined,
+
+        grid: undefined,
+        nextPiece: undefined,
+
+        oldGameContext: ({
+          isOwner,
+          score,
+          lobbyName,
+          lobbyStatus,
+          lobbyPlayersList,
+          lobbyPlayersShadows,
+          grid,
+          nextPiece,
+        }) => ({
+          isOwner,
+          score,
+          lobbyName,
+          lobbyStatus,
+          lobbyPlayersList,
+          lobbyPlayersShadows,
+          grid,
+          nextPiece,
+        }),
+      }),
+      logContext: assign((context) => {
+        console.log("context", context);
+
+        return context;
       }),
     },
   }

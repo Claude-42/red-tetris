@@ -116,7 +116,12 @@ io.on('connection', (socket) => {
   })
 
   socket.on('QUIT_LOBBY', (lobbyName) => {
-    if (gamesList.find(elt => elt.name === lobbyName).delUser(socket.id) === 'DELETE_ME') {
+    const lobby = gamesList.find(elt => elt.name === lobbyName)
+    if (lobby === undefined) {
+      return
+    }
+
+    if (lobby.delUser(socket.id) === 'DELETE_ME') {
       gamesList.splice(gamesList.findIndex(elt => elt.name === lobbyName), 1)
     }
   })

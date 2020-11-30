@@ -16,7 +16,11 @@ fr:
       </h2>
 
       <div class="flex items-center">
-        <AppButton v-if="state.matches('playing.end')" color="red">
+        <AppButton
+          v-if="state.matches('playing.gameOver')"
+          color="red"
+          @click="leaveGame"
+        >
           {{ t("leave-game") }}
         </AppButton>
       </div>
@@ -68,6 +72,7 @@ import TheBoardGameNextPieceGrid from "./TheBoardGameNextPieceGrid.vue";
 import TheBoardGameShadowList from "./TheBoardGameShadowList";
 
 import { useGrid } from "../composables/grid.js";
+import { useGame } from "../composables/game";
 
 export default {
   components: {
@@ -81,6 +86,8 @@ export default {
   setup() {
     const { t } = useI18n();
 
+    const { startGame, leaveGame } = useGame();
+
     const {
       state,
       lobbyName,
@@ -88,7 +95,6 @@ export default {
       playersShadows,
       nextPiece,
       score,
-      startGame,
     } = useGrid();
 
     return {
@@ -101,6 +107,7 @@ export default {
       score,
       playersShadows,
       startGame,
+      leaveGame,
     };
   },
 };

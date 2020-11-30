@@ -22,10 +22,6 @@ export function useGrid() {
     appMachineSend(`MOVE.${movement}`);
   }
 
-  function startGame() {
-    appMachineSend("START_GAME");
-  }
-
   return {
     state: appMachineState,
 
@@ -36,6 +32,5 @@ export function useGrid() {
     score,
 
     move,
-    startGame,
   };
 }

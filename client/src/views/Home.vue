@@ -91,7 +91,7 @@ export default {
     }
 
     watchEffect(() => {
-      if (appMachineState.value.matches("waitingToJoinLobby")) {
+      if (appMachineState.value.matches("loadingLobbies")) {
         router.push("/games");
         return;
       }

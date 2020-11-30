@@ -49,12 +49,14 @@ fr:
 </template>
 
 <script>
+import { onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 
 import { useGame } from "../composables/game.js";
 
 import AppButton from "../components/AppButton.vue";
 import ChevronIcon from "../components/ChevronIcon.vue";
+import { useAppMachineContext } from "../composables/app.js";
 
 export default {
   components: {
@@ -65,9 +67,17 @@ export default {
   setup() {
     const { t } = useI18n();
 
+    const { appMachineState, appMachineSend } = useAppMachineContext();
+
     const { games, formatGamePath } = useGame();
 
+    onMounted(() => {
+      appMachineSend("LOAD_LOBBIES");
+    });
+
     return {
+      appMachineState,
+
       t,
 
       games,

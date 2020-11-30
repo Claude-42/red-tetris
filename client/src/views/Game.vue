@@ -71,7 +71,7 @@ fr:
 </template>
 
 <script>
-import { computed, watch, watchEffect } from "vue";
+import { computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 
@@ -80,11 +80,7 @@ import { useAppMachineContext } from "../composables/app";
 import AppButton from "../components/AppButton.vue";
 import LoaderIcon from "../components/LoaderIcon.vue";
 import CrownIcon from "../components/CrownIcon.vue";
-
-const CATEGORIES = {
-  PLAYING: "PLAYING",
-  PENDING: "PENDING",
-};
+import { useGame } from "../composables/game";
 
 export default {
   components: {
@@ -102,66 +98,73 @@ export default {
     const playerName = computed(() => route.params.playerName);
 
     const { appMachineState, appMachineSend } = useAppMachineContext();
+    const {
+      playersByCategories,
+      isLobbyFull,
+      isOwner,
+      startGame,
+      leaveGame,
+    } = useGame();
 
-    watchEffect(() => {
-      // The username is invalid
-      if (appMachineState.value.matches("usernameSelection.failure")) {
-        // Replace route with Home view
-        // to ask a new username.
-        router.replace({
-          path: "/",
-          query: {
-            invalid: true,
-          },
-        });
+    watch(
+      appMachineState,
+      () => {
+        console.log("watch effect", appMachineState.value.value);
 
-        return;
+        // The username is invalid
+        if (appMachineState.value.matches("usernameSelection.failure")) {
+          console.log("reached usernameSelection.failure");
+          // Replace route with Home view
+          // to ask a new username.
+          router.replace({
+            path: "/",
+            query: {
+              invalid: true,
+            },
+          });
+
+          return;
+        }
+
+        if (appMachineState.value.matches("usernameSelection")) {
+          console.log("reached usernameSelection");
+          appMachineSend({
+            type: "SET_USERNAME",
+            data: playerName.value,
+          });
+
+          return;
+        }
+
+        if (appMachineState.value.matches("choosingLobby")) {
+          // FIXME: reach there after quiting the game
+          console.log("reached choosingLobby");
+          appMachineSend({
+            type: "SELECT_LOBBY",
+            data: lobbyName.value,
+          });
+
+          return;
+        }
+
+        if (appMachineState.value.matches("waitingToJoinLobby")) {
+          console.log("reached lobby");
+
+          appMachineSend("JOIN_LOBBY");
+
+          return;
+        }
+
+        if (appMachineState.value.matches("readyToPlay")) {
+          router.push("/board-game");
+
+          return;
+        }
+      },
+      {
+        immediate: true,
       }
-
-      if (appMachineState.value.matches("usernameSelection")) {
-        appMachineSend({
-          type: "SET_USERNAME",
-          data: playerName.value,
-        });
-
-        return;
-      }
-
-      if (appMachineState.value.matches("waitingToJoinLobby")) {
-        appMachineSend({
-          type: "JOIN_LOBBY",
-          data: lobbyName.value,
-        });
-
-        return;
-      }
-
-      if (appMachineState.value.matches("readyToPlay")) {
-        router.push("/board-game");
-
-        return;
-      }
-    });
-
-    const players = computed(
-      () => appMachineState.value.context.lobbyPlayersList ?? []
     );
-    const playersByCategories = computed(() => {
-      const categories = Object.values(CATEGORIES);
-
-      return categories
-        .map((category) => ({
-          category,
-          players: players.value
-            .filter(({ status }) => status === category)
-            .map(({ name, owner }) => ({ name, owner })),
-        }))
-        .filter(({ players }) => players.length > 0);
-    });
-    const isLobbyFull = computed(
-      () => appMachineState.value.context.lobbyStatus === "FULL"
-    );
-    const isOwner = computed(() => appMachineState.value.context.isOwner);
 
     watch(isLobbyFull, (isLobbyFull) => {
       /**
@@ -173,16 +176,6 @@ export default {
 
       router.replace("/game-full");
     });
-
-    function startGame() {
-      if (isOwner.value !== true) {
-        return;
-      }
-
-      appMachineSend("START_GAME");
-    }
-
-    function leaveGame() {}
 
     return {
       state: appMachineState,
