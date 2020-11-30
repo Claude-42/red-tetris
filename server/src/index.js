@@ -171,6 +171,10 @@ io.on('connection', (socket) => {
       tmpGame = game
     }
 
+    if (TMP_DOWN === 1) {
+      tmpPlayer.grid.score--
+    }
+
     if (tmpPlayer === undefined) {
       console.info('Could not find the player')
       return
@@ -201,6 +205,7 @@ io.on('connection', (socket) => {
 
     if ((tmpPlayer.grid.handleMove(type).status === 'ERROR' && TMP_DOWN === 1) || type === 'FALL') {
       tmpPlayer.grid.putPieceInGrid()
+      tmpPlayer.grid.score++
 
       const linesCountToBlock = tmpPlayer.grid.popLine() - 1
       if (linesCountToBlock > 0) {

@@ -58,16 +58,16 @@ class Grid {
       ).concat(rowsToKeep)
 
     switch (deletedRowsCount) {
-      case deletedRowsCount === 1:
+      case 1:
         this.score += 40
         break
-      case deletedRowsCount === 2:
+      case 2:
         this.score += 100
         break
-      case deletedRowsCount === 3:
+      case 3:
         this.score += 300
         break
-      case deletedRowsCount === 4:
+      case 4:
         this.score += 1200
         break
     }
