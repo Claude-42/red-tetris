@@ -57,6 +57,19 @@ function newGame (playerName, playerId, lobbyName) {
   }
 }
 
+function endGame (lobbyname) {
+  for (const elt in gamesList) {
+    if (elt.name === lobbyname) {
+      for (const user in elt.usersList) {
+        if (user.inGame === true) {
+          return false
+        }
+      }
+    }
+  }
+  return true
+}
+
 function getAllLobies () {
   return gamesList.map(({ name }) => name)
 }
@@ -199,6 +212,9 @@ io.on('connection', (socket) => {
         if (gameOver === 'GAME_OVER') {
           io.to(user.id).emit('GAME_OVER')
           user.inGame = false
+          if (endGame(tmpGame.name) === true) {
+            io.to(tmpGame.name).emit('END_GAME')
+          }
         }
       }
     }
@@ -225,6 +241,9 @@ io.on('connection', (socket) => {
     if (isGameOver) {
       socket.emit('GAME_OVER')
       tmpPlayer.inGame = false
+      if (endGame(tmpGame.name) === true) {
+        io.to(tmpGame.name).emit('END_GAME')
+      }
     }
 
     const shadowGridsList = tmpGame.usersList.map(user => ({
