@@ -247,6 +247,7 @@ export const appMachine = Machine(
 
               GAME_OVER: {
                 target: "gameOver",
+                actions: send("GAME_ENDED", { delay: 3000 }), // TODO: drop this line and implement a real redirection mechanism
               },
             },
           },
@@ -255,6 +256,10 @@ export const appMachine = Machine(
               QUIT_LOBBY: {
                 target: "#app.loadingLobbies.newGame",
                 actions: "sendQuitLobbyToWebsocket",
+              },
+
+              GAME_ENDED: {
+                target: "end",
               },
             },
           },

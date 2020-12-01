@@ -57,6 +57,12 @@ export function useGame() {
     appMachineSend("QUIT_LOBBY");
   }
 
+  function redirectToWaitingRoom() {
+    const waitingRoomPath = formatGamePath(lobbyName.value);
+
+    router.push(waitingRoomPath);
+  }
+
   watchEffect(() => {
     const GAMES_LIST_PATH = "/games";
 
@@ -82,5 +88,7 @@ export function useGame() {
 
     startGame,
     leaveGame,
+
+    redirectToWaitingRoom,
   };
 }
