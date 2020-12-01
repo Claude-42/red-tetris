@@ -33,7 +33,6 @@ export default {
         [CASE_COLOR.PURPLE, "bg-purple-600"],
         [CASE_COLOR.YELLOW, "bg-yellow-300"],
 
-        [CASE_COLOR.BACKGROUND, "bg-gray-100"],
         [CASE_COLOR.BLOCKED, "bg-gray-600"],
       ]);
 
