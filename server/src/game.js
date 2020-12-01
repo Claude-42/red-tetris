@@ -41,6 +41,7 @@ class Game {
     this.masterpiece = new MasterPiece()
     this.usersList.forEach(elt => {
       elt.startGame(this.masterpiece)
+      elt.score = 0
     })
   }
 }

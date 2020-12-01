@@ -22,14 +22,8 @@ const server = app.listen(PORT, () => {
 
 const io = SocketIO(server)
 
-// const masterpiece = new MasterPiece()
-// const grid = new Grid(masterpiece)
 const gamesList = []
 const uniqueUser = []
-
-// function sendData (socket) {
-//   socket.emit('ownGrid', { PAINT_GRID: grid.simulatePieceInGrid(), NEXT_PIECE: masterpiece.sendNextPiece(grid.currentPiece + 1) })
-// }
 
 function newGame (playerName, playerId, lobbyName) {
   let isNewGame = true
@@ -204,6 +198,7 @@ io.on('connection', (socket) => {
 
         if (gameOver === 'GAME_OVER') {
           io.to(user.id).emit('GAME_OVER')
+          user.inGame = false
         }
       }
     }
@@ -229,6 +224,7 @@ io.on('connection', (socket) => {
 
     if (isGameOver) {
       socket.emit('GAME_OVER')
+      tmpPlayer.inGame = false
     }
 
     const shadowGridsList = tmpGame.usersList.map(user => ({
@@ -239,3 +235,5 @@ io.on('connection', (socket) => {
     socket.broadcast.in(tmpGame.name).emit('NEW_SHADOW', shadowGridsList)
   })
 })
+
+module.exports = { newGame }
