@@ -3,9 +3,15 @@ en:
   music: "Music"
   no-music: "No music"
 
+  songs:
+    official-theme: "Official theme"
+
 fr:
   music: "Musique"
   no-music: "Aucune musique"
+
+  songs:
+    official-theme: "Thème officiel"
 </i18n>
 
 <template>
@@ -30,7 +36,7 @@ fr:
         </AppMenuItem>
 
         <AppMenuItem
-          v-for="song in availableSongs"
+          v-for="{ name: song } in availableSongs"
           :key="song"
           :disabled="song === selectedSong"
           @click="selectedSong = song"
@@ -64,12 +70,13 @@ fr:
 </template>
 
 <script>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
+
+import { useAudio } from "../composables/audio.js";
 
 import GlobeIcon from "./GlobeIcon.vue";
 import MusicIcon from "./MusicIcon.vue";
-
 import AppMenu from "./AppMenu.vue";
 import AppMenuItem from "./AppMenuItem.vue";
 
@@ -79,13 +86,45 @@ const LOCALES_FULL_NAME = {
 };
 
 function useSong() {
+  const { t } = useI18n();
+
+  const SONGS = computed(() => [
+    {
+      name: t("songs.official-theme"),
+      url:
+        "https://ia800504.us.archive.org/33/items/TetrisThemeMusic/Tetris.mp3",
+    },
+    {
+      name: "Song 2",
+      url: "",
+    },
+  ]);
+
+  const { playInLoop, stop } = useAudio();
+
   const selectedSong = ref(null);
-  const availableSongs = ["Song 1", "Song 2"];
+  const selectedSongData = computed(() =>
+    SONGS.value.find(({ name }) => name === selectedSong.value)
+  );
   const noSongSelected = computed(() => selectedSong.value === null);
+
+  // When the selected song changes, stop the previous one and play the new one.
+  // We play the song in loop.
+  watch(selectedSongData, (selectedSongData) => {
+    if (selectedSongData === undefined) {
+      stop();
+      return;
+    }
+    if (selectedSongData.url === "") {
+      return;
+    }
+
+    playInLoop(selectedSongData.url);
+  });
 
   return {
     selectedSong,
-    availableSongs,
+    availableSongs: SONGS,
     noSongSelected,
   };
 }
