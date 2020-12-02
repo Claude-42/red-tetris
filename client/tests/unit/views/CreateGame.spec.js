@@ -2,7 +2,7 @@ import "@testing-library/jest-dom/extend-expect";
 import { render, waitFor } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
 import { createI18n } from "vue-i18n";
-import { serverSocket, cleanup } from "socket.io-client";
+import { cleanup } from "socket.io-client";
 
 import App from "@/App.vue";
 import router from "@/router/index.js";
@@ -37,7 +37,7 @@ function setupI18n(defaultLanguage = "fr") {
   return i18n;
 }
 
-async function createGamePage(defaultLanguage) {
+async function createCreateGamePage(defaultLanguage) {
   router.push("/create-game");
   await router.isReady();
 
@@ -62,7 +62,7 @@ function wait(ms) {
 }
 
 test("renders the form to create a new game", async () => {
-  const { getByRole, getByPlaceholderText } = await createGamePage();
+  const { getByRole, getByPlaceholderText } = await createCreateGamePage();
 
   expect(getByRole("heading", { level: 2 }).textContent).toBe(
     "Création d'une partie"
@@ -78,7 +78,7 @@ test("renders the form to create a new game", async () => {
 test("prevents a game creation if its name is empty", async () => {
   const LOBBY_NAME = "";
 
-  const { getByRole, getByPlaceholderText } = await createGamePage();
+  const { getByRole, getByPlaceholderText } = await createCreateGamePage();
 
   const lobbyNameInput = getByPlaceholderText("Saisir le nom de la partie");
   await userEvent.type(lobbyNameInput, LOBBY_NAME);
@@ -94,7 +94,7 @@ test("prevents a game creation if its name is empty", async () => {
 test("creates a new game when the form is submitted", async () => {
   const LOBBY_NAME = "SuperPartie 3000";
 
-  const { getByRole, getByPlaceholderText } = await createGamePage();
+  const { getByRole, getByPlaceholderText } = await createCreateGamePage();
 
   const lobbyNameInput = getByPlaceholderText("Saisir le nom de la partie");
   await userEvent.type(lobbyNameInput, LOBBY_NAME);
