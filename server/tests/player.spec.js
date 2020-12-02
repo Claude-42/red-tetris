@@ -1,4 +1,3 @@
-const { TestScheduler } = require('jest')
 const { Player } = require('../src/player')
 const { Grid } = require('../src/grid')
 const { MasterPiece } = require('../src/masterpiece')
