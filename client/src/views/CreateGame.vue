@@ -2,10 +2,12 @@
 en:
   title: "Create a game"
   input-placeholder: "Fill game name"
+  submit-label: "Create the game"
 
 fr:
   title: "Création d'une partie"
   input-placeholder: "Saisir le nom de la partie"
+  submit-label: "Créer la partie"
 </i18n>
 
 <template>
@@ -29,7 +31,7 @@ fr:
       </div>
 
       <div class="flex justify-end w-full">
-        <AppButton type="submit" rounded>
+        <AppButton type="submit" rounded :aria-label="t('submit-label')">
           <ChevronIcon right />
         </AppButton>
       </div>
@@ -64,8 +66,6 @@ export default {
       if (lobbyName === "") {
         return;
       }
-
-      console.log("lobbyName", lobbyName);
 
       router.push(formatGamePath(lobbyName));
     }
