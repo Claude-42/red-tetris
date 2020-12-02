@@ -3,11 +3,13 @@ en:
   title: "My nickname"
   input-placeholder: "Fill my nickname"
   invalid-username: "Nickname already taken"
+  submit-alt: "Confirm my nickname"
 
 fr:
   title: "Mon pseudo"
   input-placeholder: "Saisir mon pseudo"
   invalid-username: "Ce surnom est déjà pris"
+  submit-alt: "Confirmer mon pseudo"
 </i18n>
 
 <template>
@@ -38,7 +40,7 @@ fr:
       </p>
 
       <div class="flex justify-end w-full">
-        <AppButton type="submit" rounded>
+        <AppButton type="submit" rounded :aria-label="t('submit-alt')">
           <ChevronIcon right />
         </AppButton>
       </div>
@@ -92,6 +94,7 @@ export default {
 
     watchEffect(() => {
       if (appMachineState.value.matches("loadingLobbies")) {
+        console.log("loading lobbies");
         router.push("/games");
         return;
       }

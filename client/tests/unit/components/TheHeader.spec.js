@@ -55,17 +55,11 @@ function setupI18n(defaultLanguage = "fr") {
 }
 
 function createTheHeader(defaultLanguage) {
-  const utils = render(
-    TheHeader,
-    {
-      global: {
-        plugins: [setupI18n(defaultLanguage)],
-      },
+  const utils = render(TheHeader, {
+    global: {
+      plugins: [setupI18n(defaultLanguage)],
     },
-    (vue, options, router, ...args) => {
-      console.log("vue, options, router, args", vue, options, router, args);
-    }
-  );
+  });
 
   return utils;
 }
