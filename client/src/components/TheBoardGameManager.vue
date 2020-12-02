@@ -22,11 +22,7 @@ fr:
       </h2>
 
       <div class="flex items-center">
-        <AppButton
-          v-if="state.matches('playing.gameOver')"
-          color="red"
-          @click="leaveGame"
-        >
+        <AppButton v-if="isGameOver" color="red" @click="leaveGame">
           {{ t("leave-game") }}
         </AppButton>
       </div>

@@ -14,8 +14,10 @@ export function useGrid() {
   );
   const score = computed(() => appMachineState.value.context.score);
 
-  const isGameOver = computed(() =>
-    appMachineState.value.matches("playing.gameOver")
+  const isGameOver = computed(
+    () =>
+      appMachineState.value.matches("playing.gameOver") ||
+      appMachineState.value.matches("playing.waitingToExitRoom")
   );
 
   function move(movement) {

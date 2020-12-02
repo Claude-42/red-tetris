@@ -247,7 +247,6 @@ export const appMachine = Machine(
 
               GAME_OVER: {
                 target: "gameOver",
-                actions: send("GAME_ENDED", { delay: 3000 }), // TODO: drop this line and implement a real redirection mechanism
               },
             },
           },
@@ -259,6 +258,13 @@ export const appMachine = Machine(
               },
 
               GAME_ENDED: {
+                target: "waitingToExitRoom",
+              },
+            },
+          },
+          waitingToExitRoom: {
+            after: {
+              3_000: {
                 target: "end",
               },
             },
@@ -371,6 +377,12 @@ export const appMachine = Machine(
         socket.on("GAME_OVER", () => {
           callback({
             type: "GAME_OVER",
+          });
+        });
+
+        socket.on("END_GAME", () => {
+          callback({
+            type: "GAME_ENDED",
           });
         });
 
