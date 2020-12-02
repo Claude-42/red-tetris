@@ -21,7 +21,6 @@
     "vue-i18n": "^9.0.0-beta.8",
     "vue-router": "^4.0.0-rc.5",
     "vue-socket.io": "^3.0.10",
-    "vuex": "^4.0.0-0",
     "xstate": "^4.14.0"
   },
   "devDependencies": {
