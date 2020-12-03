@@ -308,4 +308,4 @@ function getAllLobies (gamesList) {
   return gamesList.map(({ name }) => name)
 }
 
-module.exports = { Server, newGame, endGame }
+module.exports = { Server, newGame, endGame, getAllLobies }
