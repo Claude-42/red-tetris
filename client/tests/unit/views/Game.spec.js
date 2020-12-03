@@ -26,6 +26,9 @@ function setupI18n(defaultLanguage = "fr") {
 
       // Home.vue translations
       "invalid-username": "Nickname already taken",
+
+      // GameFull.vue translations
+      title: "The game is full",
     },
 
     fr: {
@@ -39,6 +42,9 @@ function setupI18n(defaultLanguage = "fr") {
 
       // Home.vue translations
       "invalid-username": "Ce surnom est déjà pris",
+
+      // GameFull.vue translations
+      title: "La partie ne peut pas recevoir d'autres joueurs",
     },
   };
 
@@ -133,7 +139,9 @@ test("prevents access if the game is full", async () => {
   serverSocket.emit("ROOM_STATUS", "FULL");
 
   await waitFor(() =>
-    expect(getByText("the game is full")).toBeInTheDocument()
+    expect(
+      getByText("La partie ne peut pas recevoir d'autres joueurs")
+    ).toBeInTheDocument()
   );
 });
 
