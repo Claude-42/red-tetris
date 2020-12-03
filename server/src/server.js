@@ -244,6 +244,7 @@ class Server {
         tmpPlayer.inGame = false
         if (endGame(tmpGame.name, this.gamesList) === true) {
           this.io.to(tmpGame.name).emit('END_GAME')
+          this.io.to(tmpGame.name).emit('PLAYER_JOINED_GAME', this.gamesList.find(elt => elt.name === tmpGame.name).usersList)
         }
       }
 
