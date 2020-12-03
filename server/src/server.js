@@ -1,6 +1,7 @@
 const express = require('express')
 const SocketIO = require('socket.io')
 const cors = require('cors')
+const sirv = require('sirv')
 
 const { Game } = require('./game')
 
@@ -40,15 +41,23 @@ class Server {
   setupHttpServer () {
     const app = express()
 
-    app.use(cors({
-      credentials: true,
-      origin (origin, cb) {
-        cb(null, true)
-      }
-    }))
+    const assets = sirv('public', {
+      single: true // Treat the public directory as a single-page application
+    })
+
+    app
+      .use(cors({
+        credentials: true,
+        origin (origin, cb) {
+          cb(null, true)
+        }
+      }))
+      .use(assets)
 
     this.server = app.listen(PORT, () => {
       this._ready = true
+
+      console.log(`Listening on port ${PORT}`)
     })
   }
 
