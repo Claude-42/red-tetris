@@ -278,16 +278,12 @@ function newGame (playerName, playerId, lobbyName, gamesList) {
 }
 
 function endGame (lobbyname, gamesList) {
-  for (const elt in gamesList) {
-    if (elt.name === lobbyname) {
-      for (const user in elt.usersList) {
-        if (user.inGame === true) {
-          return false
-        }
-      }
-    }
+  const game = gamesList.find(({ name }) => name === lobbyname)
+  if (game === undefined) {
+    return false
   }
-  return true
+
+  return game.usersList.every(({ inGame }) => inGame === false)
 }
 
 function getAllLobies (gamesList) {
