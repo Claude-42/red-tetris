@@ -178,14 +178,14 @@ class Server {
         return
       }
 
-      function generateOwnGridPayload (user, game) {
+      const generateOwnGridPayload = (user, game) => {
         return {
           PAINT_GRID: user.grid.simulatePieceInGrid(),
           NEXT_PIECE: game.masterpiece.sendNextPiece(user.grid.currentPiece + 1)
         }
       }
 
-      function blockGridLinesToAllPlayersExceptSender (linesCountToBlock) {
+      const blockGridLinesToAllPlayersExceptSender = (linesCountToBlock) => {
         for (const user of tmpGame.usersList) {
           if (user.name === tmpPlayer.name) {
             continue
