@@ -249,14 +249,10 @@ class Server {
 
       const shadowGridsList = tmpGame.usersList
         .filter(({ inGame }) => inGame === true)
-        .map(user => {
-          console.log('user', user)
-
-          return ({
-            name: user.name,
-            grid: user.grid.makeMeShadow()
-          })
-        })
+        .map(user => ({
+          name: user.name,
+          grid: user.grid.makeMeShadow()
+        }))
 
       socket.broadcast.in(tmpGame.name).emit('NEW_SHADOW', shadowGridsList)
     })
