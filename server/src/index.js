@@ -12,6 +12,19 @@ class Server {
   constructor () {
     this.gamesList = []
     this.uniqueUser = []
+
+    this._ready = false
+  }
+
+  isReady () {
+    return new Promise((resolve) => {
+      const timerID = setInterval(() => {
+        if (this._ready === true) {
+          resolve()
+          clearInterval(timerID)
+        }
+      }, 50)
+    })
   }
 
   setup () {
@@ -30,12 +43,13 @@ class Server {
     app.use(cors({
       credentials: true,
       origin (origin, cb) {
-        console.log('origin', origin)
         cb(null, true)
       }
     }))
 
     this.server = app.listen(PORT, () => {
+      this._ready = true
+
       console.log(`listening on ${PORT}`)
     })
   }
@@ -283,4 +297,4 @@ function getAllLobies (gamesList) {
 const serve = new Server()
 serve.setup()
 
-module.exports = { newGame }
+module.exports = { Server, newGame, endGame }

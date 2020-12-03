@@ -4,24 +4,20 @@ const { Player } = require('../src/player')
 const { Grid } = require('../src/grid')
 const { MasterPiece } = require('../src/masterpiece')
 const { Game } = require('../src/game')
-const { newGame } = require('../src/index')
+const { Server, newGame, endGame } = require('../src/index')
 
 let server
 
-beforeEach(() => {
+beforeEach(async () => {
   server = new Server()
   server.setup()
+
+  await server.isReady()
 })
 
 afterEach(() => {
-  server.close()
+  return server.close()
 })
-
-test('renders index.html page', () => {
-  // HOW TO TEST
-})
-
-test('')
 
 describe('Index.js', () => {
   describe('newGame function', () => {
@@ -31,7 +27,22 @@ describe('Index.js', () => {
       game.addUser('q', 1)
       game.addUser('w', 2)
       game.addUser('e', 3)
-      expect(newGame('r', 4, 'test')).toStrictEqual({ status: 'FULL' })
+      game.addUser('r', 4)
+      server.gamesList.push(game)
+      expect(newGame('t', 5, 'test', server.gamesList)).toStrictEqual({ status: 'FULL' })
+    })
+    test('Creating new game', () => {
+      expect(newGame('t', 5, 'test', server.gamesList)).toStrictEqual({ isNewGame: true, status: 'OK' })
+    })
+  })
+  describe('endGame function', () => {
+    test('Game is finish', () => {
+      const game = new Game('test')
+
+      game.addUser('q', 1)
+      game.addUser('w', 2)
+      server.gamesList.push(game)
+      expect(endGame('test', server.gamesList)).toStrictEqual(true)
     })
   })
 })

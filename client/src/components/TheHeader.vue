@@ -95,8 +95,16 @@ function useSong() {
         "https://ia800504.us.archive.org/33/items/TetrisThemeMusic/Tetris.mp3",
     },
     {
-      name: "Song 2",
-      url: "",
+      name: "DJ Getdown",
+      url: "https://sendeyo.com/up/d/d2479eda3a",
+    },
+    {
+      name: "Techno",
+      url: "https://sendeyo.com/up/d/93f5b8d6cb",
+    },
+    {
+      name: "Piano",
+      url: "https://sendeyo.com/up/d/7567fa2200",
     },
   ]);
 
