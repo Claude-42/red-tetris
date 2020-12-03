@@ -1,7 +1,8 @@
 import { assign, forwardTo, Machine, send } from "xstate";
 import io from "socket.io-client";
 
-const WEBSOCKET_URL = "http://localhost:3030";
+import { WEBSOCKET_URL } from "@/constants/env.js";
+
 const GO_DOWN_TIME = 1000;
 const DEBOUNCE_TIME = 100;
 
