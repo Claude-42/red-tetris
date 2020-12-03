@@ -5,7 +5,7 @@ const sirv = require('sirv')
 
 const { Game } = require('./game')
 
-const PORT = 3030
+const PORT = process.env.PORT || 3030
 
 class Server {
   constructor () {
