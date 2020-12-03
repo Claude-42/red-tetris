@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "install": "./install.sh",
     "start": "./start-production.sh",
     "coverage": "./coverage.sh"
   },
