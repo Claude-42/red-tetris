@@ -124,7 +124,13 @@ class Server {
       if (lobby.delUser(socket.id) === 'DELETE_ME') {
         this.gamesList.splice(this.gamesList.findIndex(elt => elt.name === lobbyName), 1)
       }
-      this.io.to(lobbyName).emit('PLAYER_JOINED_GAME', this.gamesList.find(elt => elt.name === lobbyName).usersList)
+
+      const game = this.gamesList.find(({ name }) => name === lobbyName)
+      if (game === undefined) {
+        return
+      }
+
+      this.io.to(lobbyName).emit('PLAYER_JOINED_GAME', game.usersList)
     })
     // ----------------------------------------------------------------------
 
