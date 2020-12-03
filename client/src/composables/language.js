@@ -1,13 +1,20 @@
 import { useLanguage } from "vue-composable";
-import { useI18n } from "vue-i18n";
+
+import { i18n } from "../plugins/i18n.js";
 
 export function useDefaultBrowserLanguage() {
-  const { locale, availableLocales } = useI18n();
+  const { availableLocales } = i18n.global;
   const { language: defaultLanguage } = useLanguage();
 
-  if (!availableLocales.includes(defaultLanguage)) {
+  if (!availableLocales.includes(defaultLanguage.value)) {
     return;
   }
 
-  locale.value = defaultLanguage;
+  setI18nLanguage(defaultLanguage.value);
+}
+
+export function setI18nLanguage(locale) {
+  i18n.global.locale.value = locale;
+
+  document.querySelector("html").setAttribute("lang", locale);
 }

@@ -74,6 +74,7 @@ import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 import { useAudio } from "../composables/audio.js";
+import { setI18nLanguage } from "../composables/language.js";
 
 import GlobeIcon from "./GlobeIcon.vue";
 import MusicIcon from "./MusicIcon.vue";
@@ -159,7 +160,7 @@ export default {
     );
 
     function setLocale(localeSelected) {
-      locale.value = localeSelected;
+      setI18nLanguage(localeSelected);
     }
 
     const { selectedSong, availableSongs, noSongSelected } = useSong();
