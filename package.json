@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "./start-production.sh"
+    "start": "./start-production.sh",
+    "coverage": "./coverage.sh"
   },
   "repository": {
     "type": "git",
