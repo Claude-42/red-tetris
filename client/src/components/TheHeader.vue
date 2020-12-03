@@ -3,15 +3,9 @@ en:
   music: "Music"
   no-music: "No music"
 
-  songs:
-    official-theme: "Official theme"
-
 fr:
   music: "Musique"
   no-music: "Aucune musique"
-
-  songs:
-    official-theme: "Thème officiel"
 </i18n>
 
 <template>
@@ -87,11 +81,9 @@ const LOCALES_FULL_NAME = {
 };
 
 function useSong() {
-  const { t } = useI18n();
-
   const SONGS = computed(() => [
     {
-      name: t("songs.official-theme"),
+      name: "Official",
       url:
         "https://ia800504.us.archive.org/33/items/TetrisThemeMusic/Tetris.mp3",
     },
