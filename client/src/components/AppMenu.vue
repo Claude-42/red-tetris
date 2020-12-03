@@ -18,7 +18,7 @@
         leave-to-class="scale-95 opacity-0"
       >
         <MenuItems
-          class="absolute right-0 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5"
+          class="absolute right-0 z-10 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5"
         >
           <slot />
         </MenuItems>
