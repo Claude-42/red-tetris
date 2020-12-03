@@ -20,12 +20,6 @@ fr:
       <h2 class="py-1 text-2xl font-bold">
         {{ lobbyName }}
       </h2>
-
-      <div class="flex items-center">
-        <AppButton v-if="isGameOver" color="red" @click="leaveGame">
-          {{ t("leave-game") }}
-        </AppButton>
-      </div>
     </header>
 
     <div class="flex flex-wrap md:divide-x">
@@ -74,7 +68,6 @@ fr:
 <script>
 import { useI18n } from "vue-i18n";
 
-import AppButton from "./AppButton.vue";
 import BoardGameSection from "./BoardGameSection.vue";
 import TheBoardGameGrid from "./TheBoardGameGrid.vue";
 import TheBoardGameNextPieceGrid from "./TheBoardGameNextPieceGrid.vue";
@@ -85,7 +78,6 @@ import { useGame } from "../composables/game";
 
 export default {
   components: {
-    AppButton,
     BoardGameSection,
     TheBoardGameGrid,
     TheBoardGameNextPieceGrid,
