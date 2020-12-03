@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "heroku-prebuild": "npm run setup",
-    "heroku-postbuild": "npm start",
+    "build": "./setup-front.sh && ./setup-back.sh",
 
     "setup": "./install.sh",
     "start": "./start-production.sh",
