@@ -1,10 +1,5 @@
-const { } = require('socket.io-client')
-
-const { Player } = require('../src/player')
-const { Grid } = require('../src/grid')
-const { MasterPiece } = require('../src/masterpiece')
 const { Game } = require('../src/game')
-const { Server, newGame, endGame } = require('../src/index')
+const { Server, newGame, endGame } = require('../src/server')
 
 let server
 
@@ -43,6 +38,14 @@ describe('Index.js', () => {
       game.addUser('w', 2)
       server.gamesList.push(game)
       expect(endGame('test', server.gamesList)).toStrictEqual(true)
+    })
+    test('Game doesnt find', () => {
+      const game = new Game('test')
+
+      game.addUser('q', 1)
+      game.addUser('w', 2)
+      server.gamesList.push(game)
+      expect(endGame('nop', server.gamesList)).toStrictEqual(false)
     })
   })
 })
